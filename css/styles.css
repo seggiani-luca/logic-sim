@@ -1,0 +1,129 @@
+/* globals */
+:root {
+	--lightgray: #dddddd;
+	--lightblue: #2f72dc;
+	--darkblue: #1f62cc;
+	--darkgray: #2a2a2a;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	overflow: hidden;
+}
+
+.hide {
+	display: none;
+}
+
+/* body */
+body {
+	display: grid;
+	grid-template-areas: "header header"
+											 "component-list workspace";
+	grid-template-rows: 50px 1fr;
+	grid-template-columns: 200px 1fr;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+/* header */
+.header {
+	grid-area: header;
+	padding: 5px;
+	display: flex;
+	justify-content: space-between;
+	background-color: var(--darkgray);
+	color: white;
+}
+
+.header-left, .header-right {
+	display: flex;
+	align-items: center;
+}
+
+.header button {
+	font-size: 16px;
+	padding: 5px;
+	margin: 5px;
+}
+
+.header .primary-button {
+	background-color: var(--lightblue);
+	border: solid 1px var(--lightblue);
+	border-radius: 5px;
+	color: white;
+}
+
+.header .primary-button:hover {
+	background-color: var(--darkblue);
+	border: solid 1px var(--darkblue);
+}
+
+.header .secondary-button {
+	background-color: transparent;
+	border: solid 1px var(--lightgray);
+	border-radius: 5px;
+	color: var(--lightgray);
+}
+
+.header .secondary-button:hover {
+	border: solid 1px white;
+	color: white;
+}
+
+.header .stored-button {
+	width: 25px;
+	height: 25px;
+	background-color: var(--lightgray); 
+  mask: url("../assets/img/icons/hamburger.svg") no-repeat center;
+  mask-size: contain;
+}
+
+.header .stored-button:hover {
+	background-color: white;
+}
+
+/* component-list */
+.component-list {
+	grid-area: component-list;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	overflow-y: scroll;
+	border-right: solid 1px var(--lightgray);
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.spacer {
+	width: 90%;
+}
+
+.component {
+	width: 100%;
+	display: flex;
+	cursor: pointer;
+}
+
+.component:hover {
+	background-color: var(--lightgray);
+	width: 100%;
+	display: flex;
+}
+
+.component p {
+	padding: 10px;
+}
+
+.component img {
+	padding: 10px;
+}
+
+/* workspace */
+.workspace {
+	grid-area: workspace;
+}
+
+.delete-button {
+	position: absolute;
+}
