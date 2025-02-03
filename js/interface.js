@@ -20,6 +20,10 @@ var deleteButtonElement;
 var canvas;
 var ctx;
 
+// lista componenti creati
+var componentInstances = []; // TODO: probabilmente starebbe bene da qualche altra parte, 
+														 // come si carica e salva?
+
 // l'interfaccia è una macchina a stati così definita:
 //
 //	variabili di stato:
@@ -49,36 +53,29 @@ class InterfaceHandler {
 		// variabili di stato della macchina a stati
 		this.currentComponent = null;
 		this.selectedComponent = null;
-
-		// variabili di stato del mouse
-		this.mouseX = 0;
-		this.mouseY = 0;
-		this.mouseOnCanvas = false;
-
-		this.hoveringInstance = null;
-		this.selectedInstance = null;
-
-		this.hoveringPin = null;
-		this.selectedPin = null;
 	}
 
 	transition(event, payload) {
 		switch(this.state) {
-			case 'rest':
+			case "rest":
 				// segnaposto
 				break;
 			
-			case 'createComponent':
+			case "createComponent":
 				// segnaposto
 				break;
 			
-			case 'handleComponent':
+			case "handleComponent":
 				// segnaposto
 				break;
 
 		}
 	}
 }
+
+// variabili di stato del mouse
+var mousePosition = new Vector();
+var mouseOnCanvas = false;
 
 // l'oggetto handler gestisce tutta l'interfaccia utente 
 handler = new InterfaceHandler();
@@ -107,12 +104,12 @@ function init() {
 	// il mouse si interfaccia con handler aggiornando le sue variabili di stato e chiamando gli eventi
 	// corrispondenti, con annessi payload se serve
 	canvas.addEventListener("mouseenter", () => {
-		handler.mouseOnCanvas = true;
+		mouseOnCanvas = true;
 		updateCanvas(); // mousemove potrebbe non registrare subito TODO: verifica se serve
 	});
 	
 	canvas.addEventListener("mouseleave", () => {
-		handler.mouseOnCanvas = false;
+		mouseOnCanvas = false;
 		updateCanvas(); // come sopra, TODO: come sopra
 	});
 
@@ -121,7 +118,14 @@ function init() {
 	});
 
 	canvas.addEventListener("click", (event) => {
-		mouseClickHandler();
+		// ferma la propagazione dell'evento (in bubble up) fino alla finestra
+		event.stopPropagation();
+
+		canvasClickHandler();
+	});
+	
+	canvas.addEventListener("click", (event) => {
+		windowClickHandler();
 	});
 }
 
@@ -132,97 +136,49 @@ function screenToCanvas(x, y) {
 	let posX = x - rect.left;
 	let posY = y - rect.top;
 
-	return { x: posX, y: posY};
+	return new Vector(posX, posY);
 }
 
-function canvasToScreen(x, y) {
-  let rect = canvas.getBoundingClientRect();
+// TODO: sembrerebbe inutile
+// function canvasToScreen(x, y) {
+//   let rect = canvas.getBoundingClientRect();
+// 
+// 	let posX = x + rect.left;
+// 	let posY = y + rect.top;
+// 
+// 	return { x: posX, y: posY};
+// }
 
-	let posX = x + rect.left;
-	let posY = y + rect.top;
-
-	return { x: posX, y: posY};
-}
-
-// funzioni di gestione del mouse 
+// funzioni di gestione del mouse
+// getisce i movimenti del mouse (sul canvas, fuori non c'è nulla da fare)
 function mouseMoveHandler(event) {
-	let position = screenToCanvas(event.clientX, event.clientY);
-	mouseX = position.x;
-	mouseY = position.y;
+	mousePosition = screenToCanvas(event.clientX, event.clientY);
 }
 
-function mouseClickHandler() {
-	// resetta il pulsante di reset 
-	deleteButtonElement.classList.add("hide");
-	
-	if(hoveringPin) {
-		// check if holding component, if yes remove it
-		if(currentComponent) {
-			currentComponent = null;
-			updateCanvas();
-			return;
-		}
-		
-		// check if pin is selected
-		if(selectedPin) {
-			// it is, test if input/output and make connection
-			if(selectedPin.type != hoveringPin.type) {
-				selectedPin.pin.connect(hoveringPin.pin);
-			}
-
-			selectedPin = null;
-		} else {
-			// select pin and try connection
-			selectedPin = hoveringPin;
-		}
-	} else if(hoveringInstance) {
-		// check if holding component, if yes remove it
-		if(currentComponent) {
-			currentComponent = null;
-			updateCanvas();
+// gestisce i click del mouse, sul canvas
+function canvasClickHandler() {
+	for(let instance of componentInstances)	{
+		// controlliamo prima se si facendo hover su un pin
+		let hoveringPin = instance.isHoveringPin(mousePosition);
+		if(hoveringPin) {
+			payload = { type: "hoveringPin", hoveringPin };
+			handler.transition("canvasClick", payload);
 			return;
 		}
 
-		// clear pin
-		selectedPin = null;
-
-		let canvasPosition = hoveringInstance.getPosition();
-		let position = canvasToScreen(canvasPosition.x, canvasPosition.y);
-
-		deleteButtonElement.classList.remove("hide");
-		deleteButtonElement.style.top = `${position.y + iconOffset}px`;
-		deleteButtonElement.style.left = `${position.x + iconOffset}px`;
-
-		selectedInstance = hoveringInstance;
-
-	} else {
-		// clear pin
-		selectedPin = null;
-
-		// check if holding component, if yes try adding
-		if(currentComponent) {
-			// still have to check object overlaps 
-			let positions = currentComponent.overlapPositions();
-			
-			// check each overlap position with each object, slow 
-			// but ideally hoveringInstance will catch it first
-			for(let position of positions) {
-				for(let istance of componentInstances) {
-					if(istance.isHovering(position.x, position.y)) {
-						// can't add, remove it and return
-						currentComponent = null;
-						updateCanvas();
-						return;
-					}
-				}
-			}
-
-			componentInstances.push(currentComponent);
-			currentComponent = null;
+		// e poi se si sta facendo hover su un componente
+		if(instance.hovering(mousePosition)) {
+			payload = { type: "hoveringComponent", instance };
+			handler.transition("canvasClick");
+			return;
 		}
 	}
-	// might have done something, pointer is still
-	updateCanvas();
+
+	handler.transition("canvasClick", null);
+}
+// e sulla finestra 
+function windowClickHandler() {
+	handler.transition("windowClick", null);
 }
 
 // canvas

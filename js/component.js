@@ -219,7 +219,7 @@ class Component {
 	}
 
 	// controlla se si sta facendo hover sul componente
-	isHovering(mousePosition) {
+	hovering(mousePosition) {
 		return rectHover(mousePosition,
 										 this.position, 
 										 this.width * gridSize, this.height * gridSize);
