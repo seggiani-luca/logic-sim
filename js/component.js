@@ -1,17 +1,23 @@
-// importa dall'interfaccia alcune costanti di dimensionamento e di stile
+// importa da interface.js
 import { 
-	gridSize, 
-	pinRadius, 
+	gridSize,						// dimensioni griglia
+	pinRadius,					// dimensioni pin
 	pinPercent, 
 	pinStrokeWidth,
-	pinStrokeColor, 
+	pinStrokeColor, 		// colori pin
 	pinInteriorDefault,
 	pinInteriorHover,
-	componentFade,
-	ledRadius,
+	componentFade,			// sfumatura componenti in creazione
+	ledRadius,					// dimensioni e colori di led
 	onColor,
-	offColor
+	offColor,
+	hizColor,
+	updateCanvas 				// funzione per l'aggiornamento dell'interfaccia (è il modo più veloce per 
+											// aggiornare l'interfaccia in fase di aggiornamento della logica) 
 } from "./interface.js";
+
+// costanti di simulazione
+const simMaxIters = 10;
 
 // classe base per vettori 2d
 export class Vector {
@@ -67,9 +73,11 @@ class Pin {
 		this.position = position;
 
 		// la logica di connessione è piuttosto asimmetrica e viene implementata nelle specializzazioni
-		// l'idea di base è che OutputPin si connette ad InputPin, e non viceversa (sia qui che nell'interfaccia)
+		// l'idea di base è che OutputPin si connette ad InputPin, e non viceversa (sia qui che 
+		// nell'interfaccia)
 	}
 
+	// ottiene la posizione assoluta del pin
 	getPosition() {
 		return this.component.getPinPosition(this.type, this.index);
 	}
@@ -105,44 +113,59 @@ class Pin {
 }
 
 // pin di ingresso
-class InputPin extends Pin {
+export class InputPin extends Pin {
 	constructor(component, index, position) {
 		super("input", component, index, position);
 
+		// il pin connesso, per InputPin solo uno
 		this.connectedPin = null;
 	}
 
+	// la funzione connect() degli InputPin verrà chiamata da un OutputPin. tutto quello che vogliamo
+	// fare qui è segnalare a un eventuale pin connesso che ci stiamo disconnettendo e connetterci al
+	// nuovo pin
 	connect(pin) {
-		// se sei connesso a un pin, scollegalo
+		// se sei connesso a un pin, disconnettiti
 		if(this.connectedPin) {
 			this.connectedPin.disconnect(this);
 		}
 
+		// connettiti al nuovo pin
 		this.connectedPin = pin;
 	}
 	
+	// la funzione disconnect() degli InputPin verrà, come sopra, chiamata da un OutputPin. ci 
+	// aspettiamo che lato OutputPin tutto sia in ordine, quindi ci limitiamo ad annullare il 
+	// riferimento
 	disconnect() {
 		this.connectedPin = null;
 	}
 
+	// se sei connesso ad un pin restituisci il suo valore, altrimenti restituisci alta impedenza
 	get() {
 		if(this.connectedPin) {
+			// leggi dall'OutputPin e restituisci
 			return this.connectedPin.value;
+		} else {
+			return null; // null rappresenta l'alta impedenza
 		}
 	}
 }
 
 // pin di uscita
-class OutputPin extends Pin {
+export class OutputPin extends Pin {
 	constructor(component, index, position) {
 		super("output", component, index, position);
 		
-		// il pin di uscita tiene conto del suo valore
-		this.value = false;
-
+		// l'OutputPin tiene conto del suo valore
+		this.value = null;
+		
+		// possiamo connetterci a più di un InputPin 
 		this.connectedPins = [];
 	}
 
+	// la funzione connect() degli OutputPin si occupa di connettere un InputPin e segnalargli la 
+	// connessione
 	connect(pin) {
 		// evita aliasing
 		let index = this.connectedPins.indexOf(pin);
@@ -162,36 +185,49 @@ class OutputPin extends Pin {
 			return;
 		}
 
+		// aggiungi il pin ai pin connessi
 		this.connectedPins.push(pin);
+		// segnala che ti sei connesso
 		pin.connect(this);
 	}
 	
+	// la funzione disconnect() deglli OutputPin prende un riferimento ad un pin, e lo disconnette se
+	// gli è connesso, segnalandogli la disconnessione
 	disconnect(pin) {
 		let index = this.connectedPins.indexOf(pin);
 
 		if (index !== -1) {
+			// c'è, rimuovilo
 			this.connectedPins.splice(index, 1);
+			// segnala che ti sei disconnesso
 			pin.disconnect();
 		} else {
 			console.error("Cannot disconnect pin " + pin);
 		}
 	}
 
+	// disconnette tutti i pin connessi
 	disconnectAll() {
 		for(let pin of this.connectedPins) {
 			pin.disconnect();
 		}
-
-		this.connectedPins = [];
 	}
 
-	set(value) {
+	// imposta il valore del pin, propaga, e restituisce true se è cambiato qualcosa
+	set(value) {	
+		console.debug("Pin at index " + this.index + " of component " + this.component.type + 
+								" is being set to value " + value);
+
+		let changed = value != this.value;
 		this.value = value;
+
+		updateCanvas(); // dobbiamo aggiornare qui	
+		return changed;
 	}
 } 
 
 // classe base per i componenti
-class Component {
+export class Component {
 	constructor(type, 
 							inputNum, outputNum, 		// pin 
 							width, height, 					// dimensioni
@@ -240,10 +276,10 @@ class Component {
 		}
 	}
 
-	// scollega tutti i pin
+	// disconnetti tutti i pin
 	clearPins() {
 		for(let input of this.inputs) {
-			// gli input devono scollegarsi dai loro output
+			// gli input devono disconnettersi dai loro output
 			let connectedPin = input.connectedPin;
 			if(connectedPin) {
 				connectedPin.disconnect(input);
@@ -343,6 +379,7 @@ class Component {
 		// rendi meno opaco se fade è true
 		ctx.globalAlpha = fade ? componentFade : 1;
 		
+		// disegna l'immagine vettoriale che rappresenta il componente stesso
 		ctx.drawImage(this.symbol, drawX, drawY, gridSize * this.width, gridSize * this.height);
 
 		//resetta l'opacità
@@ -382,7 +419,20 @@ class InOutComponent extends Component {
 		// interno
 		ctx.beginPath();
 		ctx.arc(this.position.x, this.position.y, ledRadius, 0, 2 * Math.PI);
-		ctx.fillStyle = this.value ? onColor : offColor;
+		
+		// il colore varia in base al valore di value
+		switch(this.value) {
+			case false:
+				ctx.fillStyle = offColor;
+				break;
+			case true:
+				ctx.fillStyle = onColor;
+				break;
+			default:
+				ctx.fillStyle = hizColor; // null rappresenta l'alta impedenza
+				break;
+		}
+
 		ctx.fill();
 
 		// esterno
@@ -413,11 +463,11 @@ class Input extends InOutComponent {
 	}
 
 	toggle() {
-		this.value = ~this.value;
+		this.value = !this.value;
 	}
 
 	evaluate() {
-		this.outputs[0].set(this.value);
+		return this.outputs[0].set(this.value);
 	}
 }
 
@@ -429,10 +479,13 @@ class Output extends InOutComponent {
 					position, // posizione
 					"./assets/img/symbols/out.svg"); // simbolo
 
+		// gli output partono in alta impedenza
+		this.value = null;
 	}	
 
 	evaluate() {
 		this.value = this.inputs[0].get();
+		return false; // non propagherà comunque a nessuno
 	}
 }
 
@@ -447,7 +500,10 @@ class NOTGate extends Component {
 	}
 
 	evaluate() {
-		this.outputs[0].set(!this.inputs[0].get());	
+		let in1 = this.inputs[0].get();
+		if(in1 == null) return null;
+
+		return this.outputs[0].set(!in1);	
 	}
 }
 
@@ -461,7 +517,11 @@ class ANDGate extends Component {
 	}
 
 	evaluate() {
-		this.outputs[0].set(this.inputs[0].get() && this.inputs[1].get());	
+		let in1 = this.inputs[0].get();
+		let in2 = this.inputs[1].get();
+		if((in1 == null) || (in2 == null)) return null;
+
+		return this.outputs[0].set(in1 && in2);		
 	}
 }
 
@@ -475,7 +535,11 @@ class NANDGate extends Component {
 	}
 
 	evaluate() {
-		this.outputs[0].set(!(this.inputs[0].get() && this.inputs[1].get()));	
+		let in1 = this.inputs[0].get();
+		let in2 = this.inputs[1].get();
+		if((in1 == null) || (in2 == null)) return null;
+
+		return this.outputs[0].set(!(in1 && in2));		
 	}
 }
 
@@ -489,7 +553,11 @@ class ORGate extends Component {
 	}
 
 	evaluate() {
-		this.outputs[0].set(this.inputs[0].get() || this.inputs[1].get());	
+		let in1 = this.inputs[0].get();
+		let in2 = this.inputs[1].get();
+		if((in1 == null) || (in2 == null)) return null;
+
+		return this.outputs[0].set(in1 || in2);		
 	}
 }
 
@@ -503,7 +571,11 @@ class NORGate extends Component {
 	}
 
 	evaluate() {
-		this.outputs[0].set(!(this.inputs[0].get() || this.inputs[1].get()));	
+		let in1 = this.inputs[0].get();
+		let in2 = this.inputs[1].get();
+		if((in1 == null) || (in2 == null)) return null;
+
+		return this.outputs[0].set(!(in1 || in2));		
 	}
 }
 
@@ -517,7 +589,11 @@ class XORGate extends Component {
 	}
 
 	evaluate() {
-		this.outputs[0].set(this.inputs[0].get() != this.inputs[1].get());
+		let in1 = this.inputs[0].get();
+		let in2 = this.inputs[1].get();
+		if((in1 == null) || (in2 == null)) return null;
+
+		return this.outputs[0].set(in1 != in2);		
 	}
 }
 
@@ -531,7 +607,11 @@ class XNORGate extends Component {
 	}
 
 	evaluate() {
-		this.outputs[0].set(this.inputs[0].get() == this.inputs[1].get());	
+		let in1 = this.inputs[0].get();
+		let in2 = this.inputs[1].get();
+		if((in1 == null) || (in2 == null)) return null;
+
+		return this.outputs[0].set(in1 == in2);		
 	}
 }
 
@@ -550,3 +630,24 @@ export const gateComponents = [
 	{ name: "XOR", icon: "./assets/img/symbols/xor.svg", type: XORGate },
 	{ name: "XNOR", icon: "./assets/img/symbols/xnor.svg", type: XNORGate }
 ];
+
+// aggiorna la logica dei componenti
+export function updateLogic(components) {
+	for(let i = 0; i < simMaxIters; i++) {
+		console.debug("Processing logic at iteration " + i);
+		
+		let stable = true;
+		
+		// aggiorna tutti i componenti
+		for(let instance of components) {
+			if(instance.evaluate()) {
+				console.debug("Component " + instance.type + " was unstable, doing another iteration");
+				stable = false;
+			}
+		}
+	
+		// se non ci sono stati cambiamenti di variabili logiche, esci
+		if(stable) break;
+	}
+	console.debug("Logic processing stopped");
+}

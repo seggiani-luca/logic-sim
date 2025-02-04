@@ -1,39 +1,56 @@
-// importa le definizioni dei componenti 
-import * as Component from "./component.js"
+// importa da component.js 
+import {
+	Vector,						// classe vettore 2d 
+	inoutComponents,	// componenti di input/output e gate
+	gateComponents,
+	updateLogic	// funzione per l'aggiornamento della logica
+} from "./component.js"
+
+// importa da serialize.js
+import {
+	serializeCircuit,
+	rebuildCircuit
+} from "./serialize.js"
 
 // costanti di dimensionamento e stile 
-export const gridSize = 30;
+export const gridSize = 30;	// dimensioni e colore griglia
 const gridColor = "#dddddd";
 
-export const pinRadius = 10;
+export const pinRadius = 10;		// dimensioni pin
 export const pinPercent = 0.5;
 export const pinStrokeWidth = 2;
 
-export const pinStrokeColor = "#555555";
+export const pinStrokeColor = "#555555";	// colori pin
 export const pinInteriorDefault = "#ffffff";
 export const pinInteriorHover = "#cccccc";
 
-const wireWidth = 5;
-const hizColor = "#555555";
-const bezierOffset = 100;
+const wireWidth = 5;	// dimensioni e forma fili di connessione
 
-export const componentFade = 0.6;
+export const componentFade = 0.6;	// sfumatura dei componenti in creazione
 
-export const ledRadius = 10;
+export const ledRadius = 10;	// dimensioni e colori di led e fili di connessione
 export const onColor = "#3fff00";
 export const offColor = "#ff2400";
+export const hizColor = "#555555";
+
+const componentListWidth = 200;	// dimensioni elementi html
+const headerHeight = 50;
 
 // elementi html 
 var deleteButtonElement;
+var loginButtonElement;
+var signupButtonElement;
+var saveButtonElement;
+var storedButtonElement;
 
 // canvas
 var canvas;
 var ctx;
 
 // lista componenti creati
-var componentInstances = []; // TODO: probabilmente starebbe bene da qualche altra parte,
-														 // come si carica e salva?
-window.componentInstances = componentInstances; // TODO: debug
+var currentCircuit = { circuitName: null, componentInstances: [] };
+
+window.currentCircuit = currentCircuit; // TODO: debug
 
 // l'interfaccia è una macchina a stati così definita:
 //
@@ -43,7 +60,7 @@ window.componentInstances = componentInstances; // TODO: debug
 //		currentPin: un pin di un componente sul canvas selezionato
 //
 //		currentComponent fa parte dei componenti definiti sul canvas e viene disegnato comunque,
-//		toCreateComponent va disegnato solo quando si è su createComponent
+//		toCreateComponent va disegnato solo quando si è nello stato createComponent
 //		
 // - rest: 
 // 		non fare nulla
@@ -115,21 +132,24 @@ class InterfaceHandler {
 
 		// variabili di stato
 		this.currentComponent = null;
-		this.toCreateComponent = null;
-		
+		this.toCreateComponent = null;	
 		this.currentPin = null;
 
 		console.debug("InterfaceHandler instantiated at state %c" + this.state, "font-weight: bold;");
 	}
 
+	// gestisce le transizioni sulla base di eventi e payload (che sono null o contengono dati 
+	// correlati all'evento)
 	transition(event, payload) {
-		console.debug("InterfaceHandler received event %c" + event + "%c, payload is:", "font-weight: bold;");
+		console.debug("InterfaceHandler received event %c" + event + "%c, payload is:", 
+									"font-weight: bold;");
 		console.debug(payload);
 		
 		switch(this.state) {
 			case "rest":
 				switch(event) {
 					case "newComponent":
+						// istanzia la classe del componente da creare
 						let componentClass = payload.which;
 						this.toCreateComponent = new componentClass;
 						
@@ -138,22 +158,28 @@ class InterfaceHandler {
 
 					case "canvasClick":
 						if(!payload) {
+							// click a vuoto
 							break;
 						}
 
 						if(payload.type == "hoveringComponent") {
+							// sei su un componente, selezionalo
 							this.currentComponent = payload.which;
 							this.state = "handleComponent";
 						}
 
 						if(payload.type == "hoveringButton") {
+							// sei su un pulsante, aggiorna il valore
 							let component = payload.which;
+							// (component è sicuramente di tipo IN)
 							component.toggle();
 
-							updateLogic();
+							// metti in coda un aggiornamento della logica (hai cambiato una variabile logica)
+							updateLogic(currentCircuit.componentInstances);
 						}
 
 						if(payload.type == "hoveringPin") {
+							// sei su un pin, inizia a trascinare
 							let pin = payload.which;
 
 							console.debug("Selected pin " + pin.type + " at index " + pin.index + " of object " 
@@ -161,7 +187,7 @@ class InterfaceHandler {
 
 							// ci comportiamo diversamente per pin di input e di output:
 							if(pin.type == "input") {
-								// i pin di input devono trovare il loro pin di output e scollegarlo
+								// i pin di input devono trovare il loro pin di output
 								let connectedPin = pin.connectedPin;
 
 								// se non c'è pin di output collegato non facciamo nulla
@@ -172,10 +198,16 @@ class InterfaceHandler {
 								
 								// prendiamo il pin di output come pin di partenza
 								this.currentPin = connectedPin;
-								// e lo scolleghiamo
+								// e lo scolleghiamo (questo scollegerà il pin selezionato inizialmente)
 								connectedPin.disconnect(pin);
+
+
+								// metti in coda un aggiornamento della logica (hai disconnesso due componenti)
+								updateLogic(currentCircuit.componentInstances);
 							} else if(pin.type == "output") {
+								// queste informazioni sono per il debug
 								let connectedPins = pin.connectedPins;
+								
 								console.debug("Input pin is connected to:");
 								for(let conPin of connectedPins) {
 									console.debug("Pin " + conPin.type + " at index " + conPin.index + " of object "
@@ -197,16 +229,19 @@ class InterfaceHandler {
 				switch(event) {
 					case "canvasClick":
 						if(!payload) {
+							// click su una zona vuota, prova a creare il componente (altre collisioni vengono 
+							// verificate nella funzione createComponent())
 							createComponent(this.toCreateComponent)
 						}
+
 						this.state = "rest";
 						break;
 				
 					case "newComponent":
+						// si vuole creare un altro componente, interrompi e istanzialo
 						let componentClass = payload.which;
 						this.toCreateComponent = new componentClass;
 							
-						updateLogic();
 						break;
 
 					default:
@@ -217,19 +252,20 @@ class InterfaceHandler {
 			case "handleComponent":
 				switch(event) {
 					case "newComponent":
+						// si vuole creare un altro componente, interrompi e istanzialo
 						let componentClass = payload.which;
 						this.toCreateComponent = new componentClass;
 						
 						this.state = "createComponent";
 						break;
 				
-					case "canvasButtonClick":
-						switch(payload.which) {
-							case "delete":
-								deleteComponent(this.currentComponent);
-								this.state = "rest";
-								break;
-						}
+					case "deleteButtonClick":
+						// si è premuto il tasto di rimozione del componente, rimuovilo
+						deleteComponent(this.currentComponent);
+						
+						// metti in coda un aggiornamento della logica (hai eliminato un componente)
+						updateLogic(currentCircuit.componentInstances);
+						this.state = "rest";
 						break;
 
 					default:
@@ -240,6 +276,7 @@ class InterfaceHandler {
 			case "dragPin":
 				switch(event) {
 					case "newComponent":
+						// si vuole creare un altro componente, interrompi e istanzialo
 						let componentClass = payload.which;
 						this.toCreateComponent = new componentClass;
 						
@@ -248,12 +285,16 @@ class InterfaceHandler {
 				
 					case "canvasClick":
 						if(payload && payload.type == "hoveringPin") {
+							// si è fatto click su un altro pin, prova a collegarlo
 							let otherPin = payload.which;
-						
+							// le connessioni si fanno sempre input -> output, e la funzione connect() saprà da
+							// sola se ci sono errori di aliasing o di tipi
 							this.currentPin.connect(otherPin);
+					
+							// metti in coda un aggiornamento della logica (hai collegato dei componenti)
+							updateLogic(currentCircuit.componentInstances);
 						}
 						
-						updateLogic();
 						this.state = "rest";
 						break;
 
@@ -272,10 +313,11 @@ class InterfaceHandler {
 
 // l'oggetto handler gestisce tutta l'interfaccia utente 
 var handler = new InterfaceHandler();
-window.handler = handler;
+
+window.handler = handler; // TODO: debug
 
 // variabili di stato del mouse
-var mousePosition = new Component.Vector();
+var mousePosition = new Vector();
 var mouseOnCanvas = false;
 
 function init() {
@@ -284,7 +326,31 @@ function init() {
 	deleteButtonElement = document.querySelector(".delete-button");
 	deleteButtonElement.classList.add("hide");
 	deleteButtonElement.addEventListener("click", (event) => {
-		canvasButtonHandler(event, "delete") 
+		deleteButtonHandler(event); 
+	});
+
+	// pulsante di login 
+	loginButtonElement = document.querySelector(".login-button");
+	loginButtonElement.addEventListener("click", () => {
+		loginButtonHandler(); 
+	});
+	
+	// pulsante di signup 
+	signupButtonElement = document.querySelector(".signup-button");
+	signupButtonElement.addEventListener("click", () => {
+		signupButtonHandler(); 
+	});
+	
+	// pulsante di salvataggio 
+	saveButtonElement = document.querySelector(".save-button");
+	saveButtonElement.addEventListener("click", () => {
+		saveButtonHandler(); 
+	});
+	
+	// pulsante del menu circuiti salvati
+	storedButtonElement = document.querySelector(".stored-button");
+	storedButtonElement.addEventListener("click", () => {
+		storedButtonHandler(); 
 	});
 
 	// lista dei componenti 
@@ -300,22 +366,25 @@ function init() {
 	updateCanvas();
 
 	// event listener per il ridimensionamento del canvas
-	window.addEventListener("resize", resizeCanvas);
-	
-	// il mouse si interfaccia con handler aggiornando le sue variabili di stato e chiamando gli eventi
-	// corrispondenti, con annessi payload se serve
-	canvas.addEventListener("mouseenter", () => {
-		mouseOnCanvas = true;
-		updateCanvas(); // mousemove potrebbe non registrare subito
+	window.addEventListener("resize", () => {
+		resizeCanvas();
+		updateCanvas();
 	});
 	
-	canvas.addEventListener("mouseleave", () => {
+	// il mouse si interfaccia con handler aggiornando le sue variabili di stato e chiamando gli 
+	// eventi corrispondenti, con annessi payload se serve
+	canvas.addEventListener("mouseenter", (event) => {
+		mouseOnCanvas = true;
+		mouseHandler(event); // come sopra, mousemove potrebbe non registrare subito
+	});
+	
+	canvas.addEventListener("mouseleave", (event) => {
 		mouseOnCanvas = false;
-		updateCanvas(); // come sopra
+		mouseHandler(event); // come sopra, mousemove potrebbe non registrare subito
 	});
 
 	canvas.addEventListener("mousemove", (event) => {
-		mouseMoveHandler(event);
+		mouseHandler(event);
 	});
 
 	canvas.addEventListener("click", (event) => {
@@ -331,13 +400,14 @@ function init() {
 }
 
 // utilità per le trasformazioni da schermo a canvas 
-function screenToCanvas(x, y) {
+function screenToCanvas(x, y) { // questa prende una coppia di numeri e non un vettore, perchè è 
+																// quello che ci restituisce l'evento di spostamento del mouse 
   let rect = canvas.getBoundingClientRect();
 
 	let posX = x - rect.left;
 	let posY = y - rect.top;
 
-	return new Component.Vector(posX, posY);
+	return new Vector(posX, posY);
 }
 
 function canvasToScreen(pos) {
@@ -346,20 +416,21 @@ function canvasToScreen(pos) {
 	let posX = pos.x + rect.left;
 	let posY = pos.y + rect.top;
 
-	return { x: posX, y: posY};
+	return new Vector(posX, posY);
 }
 
 // funzioni di gestione del mouse
 // getisce i movimenti del mouse (sul canvas, fuori non c'è nulla da fare)
-function mouseMoveHandler(event) {
+function mouseHandler(event) {
+	// converti la posizione
 	mousePosition = screenToCanvas(event.clientX, event.clientY);
-
+	// aggiorna il canvas
 	updateCanvas();
 }
 
 // gestisce i click del mouse sul canvas
 function canvasClickHandler() {
-	for(let instance of componentInstances)	{
+	for(let instance of currentCircuit.componentInstances)	{
 		// controlliamo prima se si sta facendo hover su un pulsante del componente
 		if(instance.type == "IN" && instance.hoveringButton(mousePosition)) {
 			let payload = { type: "hoveringButton", which: instance };
@@ -375,7 +446,7 @@ function canvasClickHandler() {
 			return;
 		}
 
-		// e poi se si sta facendo hover su un componente
+		// e infine se si sta facendo hover su un componente
 		if(instance.hovering(mousePosition)) {
 			let payload = { type: "hoveringComponent", which: instance };
 			handler.transition("canvasClick", payload);
@@ -383,26 +454,57 @@ function canvasClickHandler() {
 		}
 	}
 
+	// non stiamo facendo hover su nulla, lo rappresentiamo con u payload a null
 	handler.transition("canvasClick", null);
 }
 
 // gestisce i click del mouse sulla finestra
 function windowClickHandler() {
+	// il payload è sempre a null (non ci interessa sapere dove siamo)
 	handler.transition("windowClick", null);
 }
 
-// gestisce i pulsanti sul canvas 
-function canvasButtonHandler(event, which) {
+// gestisce il pulsante di rimozione sul canvas 
+function deleteButtonHandler(event) {
 	// ferma la propagazione dell'evento (in bubble up) fino alla finestra
 	event.stopPropagation();
 
-	handler.transition("canvasButtonClick", { which: which });
+	handler.transition("deleteButtonClick", null);
+}
+
+// gestisce il pulsante di login 
+function loginButtonHandler() {
+}
+
+// gestisce il pulsante di signup
+function signupButtonHandler() {
+}
+
+// gestisce il pulsante di salvataggio
+function saveButtonHandler() {
+	let json = serializeCircuit(currentCircuit);
+	
+	console.debug("Current circuit JSON is:");
+	console.debug(json);
+
+	let obj = rebuildCircuit(json);
+
+	console.debug("Rebuilt circuit is:");
+	console.debug(obj);
+
+	console.debug("Swapping current circuit with rebuilt one... wish me luck!");
+	currentCircuit = obj;
+}
+
+// gestisce il pulsante del menu circuiti salvati
+function storedButtonHandler() {
 }
 
 // disegna la griglia
 function drawGrid() {
 	ctx.lineWidth = 1;
 	
+	// linee orizzontali
 	for(let y = 0; y <= canvas.height; y += gridSize) {
 		ctx.beginPath();
 		ctx.moveTo(0, y);
@@ -411,6 +513,7 @@ function drawGrid() {
 		ctx.stroke();
 	}
 
+	// linee verticali
 	for(let x = 0; x <= canvas.width; x += gridSize) {
 		ctx.beginPath();
 		ctx.moveTo(x, 0);
@@ -427,11 +530,12 @@ function drawWire(startPos, endPos, color) {
 	ctx.lineWidth = wireWidth;
 	ctx.strokeStyle = color;
 
-	let calcOffset = (endPos.x - startPos.x) / 2;
-	let offset = calcOffset >= 0 ? Math.min(bezierOffset, calcOffset) : bezierOffset;
+	// l'idea è di usare una bezier con due punti di controllo: uno a destra del pin di uscita e uno 
+	// a sinistra del pin di ingresso
+	let offset = Math.abs((endPos.x - startPos.x) / 2);
 
-	let cp1 = { x: startPos.x + offset, y: startPos.y };
-  let cp2 = { x: endPos.x - offset, y: endPos.y };
+	let cp1 = new Vector(startPos.x + offset, startPos.y);
+  let cp2 = new Vector(endPos.x - offset, endPos.y);
 
   ctx.moveTo(startPos.x, startPos.y);
   ctx.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, endPos.x, endPos.y);
@@ -439,8 +543,8 @@ function drawWire(startPos, endPos, color) {
 	ctx.stroke(); 
 }
 
-// aggiorna il canvas in fase di hover su di esso
-function updateCanvas() {
+// aggiorna il canvas
+export function updateCanvas() {
 	// ripulisci tutto
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	
@@ -448,7 +552,7 @@ function updateCanvas() {
 	drawGrid();
 
 	// disegna i componenti
-	for(let instance of componentInstances) {
+	for(let instance of currentCircuit.componentInstances) {
 		instance.draw(ctx, mousePosition);
 	}
 
@@ -461,12 +565,26 @@ function updateCanvas() {
 	}
 
 	// disegna le connessioni fra i pin
-	for(let instance of componentInstances) {
+	for(let instance of currentCircuit.componentInstances) {
 		for(let pin of instance.inputs) {
 			let connectedPin = pin.connectedPin;
 
 			if(connectedPin) {
-				let color = connectedPin.value ? onColor : offColor;
+				let color;
+	
+				// decidi il colore in base al valore di connectedPin
+			switch(connectedPin.value) {
+				case false:
+					color = offColor;
+					break;
+				case true:
+					color = onColor;
+					break;
+				default:
+					color = hizColor; // null rappresenta l'alta impedenza
+					break;
+			}
+
 				drawWire(connectedPin.getPosition(), pin.getPosition(), color);
 			}
 		}
@@ -499,25 +617,14 @@ function updateCanvas() {
 	}
 }
 
-// aggiorna la logica dei componenti
-function updateLogic() {
-	// aggiorna tutti i componenti
-	for(let i = 0; i < 10; i++) {	
-		// TODO: questo approccio supporta le asincrone, per me anche troppo. domani rendi meno dispendioso
-		for(let instance of componentInstances) {
-			instance.evaluate();
-		}
-	}
-}
-
-// trasferisce un istanza di component in componentInstances
+// trasferisce un'istanza di component in currentCircuit.componentInstances
 function createComponent(instance) {
 	// prima vogliamo controllare "collisioni", cioè caselle già coperte da altre istanze su cui si 
 	// andrebbe a sovrapporre instance 
 	let overlapPositions = instance.overlapPositions();
 
 	for(let position of overlapPositions) {
-		for(let checkingInstance of componentInstances) {
+		for(let checkingInstance of currentCircuit.componentInstances) {
 			if(checkingInstance.hovering(position)) {
 				console.debug("Couldn't create component because of overlap");
 				return;
@@ -526,20 +633,20 @@ function createComponent(instance) {
 	}
 
 	// tutto ok, crea
-	componentInstances.push(instance);
+	currentCircuit.componentInstances.push(instance);
 }
 
-// elimina un istanza di componente
+// elimina un'istanza di componente
 function deleteComponent(instance) {
 	// trova l'indice dell'istanza
-	let index = componentInstances.indexOf(instance);
+	let index = currentCircuit.componentInstances.indexOf(instance);
 
 	if (index !== -1) {
 		// elimina i pin
 		instance.clearPins();
 
 		// rimuovi l'istanza
-		componentInstances.splice(index, 1);
+		currentCircuit.componentInstances.splice(index, 1);
 		deleteButtonElement.classList.add("hide");
 	} else {
 		console.error("Cannot delete component instance " + instance);
@@ -548,9 +655,9 @@ function deleteComponent(instance) {
 
 // quando la finestra viene ridimensionata si vuole ridimensionare anche il canvas 
 function resizeCanvas() {
-	// bruttino, dipende dal CSS 
-	let canvasWidth = window.innerWidth - 200;
-	let canvasHeight = window.innerHeight - 50;
+	// dipende dal CSS 
+	let canvasWidth = window.innerWidth - componentListWidth;
+	let canvasHeight = window.innerHeight - headerHeight;
 	canvas.width = canvasWidth;
 	canvas.height = canvasHeight;
 }
@@ -592,7 +699,7 @@ function initComponentList(componentList) {
 	inoutsCategory.textContent = "Input/Output";
 	componentList.appendChild(inoutsCategory);	
 
-	for(let component of Component.inoutComponents) {
+	for(let component of inoutComponents) {
 		let componentElement = createComponentElement(component); 
 		componentList.appendChild(componentElement);
 	}
@@ -603,7 +710,7 @@ function initComponentList(componentList) {
 	gatesCategory.textContent = "Gates";
 	componentList.appendChild(gatesCategory);	
 
-	for(let component of Component.gateComponents) {
+	for(let component of gateComponents) {
 		let componentElement = createComponentElement(component); 
 		componentList.appendChild(componentElement);
 	}
