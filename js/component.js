@@ -3,12 +3,18 @@ import {
 	gridSize, 
 	pinRadius, 
 	pinPercent, 
-	pinStroke, 
-	pinInterior 
+	pinStrokeWidth,
+	pinStrokeColor, 
+	pinInteriorDefault,
+	pinInteriorHover,
+	componentFade,
+	ledRadius,
+	onColor,
+	offColor
 } from "./interface.js";
 
 // classe base per vettori 2d
-class Vector {
+export class Vector {
 	constructor(x, y) {
 		this.x = x;
 		this.y = y;
@@ -17,7 +23,7 @@ class Vector {
 
 // utilità aritmetiche per i vettori
 function addVector(vec1, vec2) {
-	res = new Vector(vec1.x + vec2.x, vec1.y + vec2.y);
+	let res = new Vector(vec1.x + vec2.x, vec1.y + vec2.y);
 	return res;
 }
 
@@ -48,7 +54,10 @@ function circleHover(hoverPos, center, radius) {
 
 // classe base per i pin
 class Pin {
-	constructor(component, index, position) {
+	constructor(type, component, index, position) {
+		// tipo di pin (input, output)
+		this.type = type;
+
 		// riferimento al componente padre 
 		this.component = component;
 		// indice nel padre
@@ -56,32 +65,41 @@ class Pin {
 
 		// posizione, relativa al componente padre
 		this.position = position;
-		
-		this.connectedPin = null;
+
+		// la logica di connessione è piuttosto asimmetrica e viene implementata nelle specializzazioni
+		// l'idea di base è che OutputPin si connette ad InputPin, e non viceversa (sia qui che nell'interfaccia)
 	}
 
-	connect(pin) {
-		// evita aliasing
-		if(this.connectedPin !== pin) {
-			this.connectedPin = pin;
-			pin.connect(this);
-		}
-	}	
+	getPosition() {
+		return this.component.getPinPosition(this.type, this.index);
+	}
 
 	// disegna il pin
-	draw(ctx, base) {		
+	draw(ctx, base, style) {
+		let xPos = this.position.x + base.x;
+		let yPos = this.position.y + base.y;
+
 		// interno 
 		ctx.beginPath();
-		ctx.arc(this.position.x + base.x, this.position.y + base.y, 
-						pinRadius, 0, 2 * Math.PI);
-		ctx.fillStyle = pinInterior;
+		ctx.arc(xPos, yPos, pinRadius, 0, 2 * Math.PI);
+
+		// disegna diversamente l'interno a seconda dello stato corrente 
+		switch(style) {
+			case "hover":
+				ctx.fillStyle = pinInteriorHover;
+				break;
+
+			default:
+				ctx.fillStyle = pinInteriorDefault;
+		}
+
 		ctx.fill();
 		
 		// esterno 
 		ctx.beginPath();
-		ctx.arc(this.position.x + base.x, this.position.y + base.y, 
-						pinRadius, 0, 2 * Math.PI);
-		ctx.strokeStyle = pinStroke;
+		ctx.arc(xPos, yPos, pinRadius, 0, 2 * Math.PI);
+		ctx.lineWidth = pinStrokeWidth;
+		ctx.strokeStyle = pinStrokeColor;
 		ctx.stroke();
 	}
 }
@@ -89,7 +107,22 @@ class Pin {
 // pin di ingresso
 class InputPin extends Pin {
 	constructor(component, index, position) {
-		super(component, index, position);
+		super("input", component, index, position);
+
+		this.connectedPin = null;
+	}
+
+	connect(pin) {
+		// se sei connesso a un pin, scollegalo
+		if(this.connectedPin) {
+			this.connectedPin.disconnect(this);
+		}
+
+		this.connectedPin = pin;
+	}
+	
+	disconnect() {
+		this.connectedPin = null;
 	}
 
 	get() {
@@ -102,10 +135,54 @@ class InputPin extends Pin {
 // pin di uscita
 class OutputPin extends Pin {
 	constructor(component, index, position) {
-		super(component, index, position);
+		super("output", component, index, position);
 		
-		// il pin d i uscita tiene conto del suo valore
+		// il pin di uscita tiene conto del suo valore
 		this.value = false;
+
+		this.connectedPins = [];
+	}
+
+	connect(pin) {
+		// evita aliasing
+		let index = this.connectedPins.indexOf(pin);
+		if(index != -1) {
+			console.debug("Avoided pin connection because of same connection aliasing");
+			return;
+		}
+		
+		if(this === pin) {
+			console.debug("Avoided pin connection because of self-self aliasing");
+			return;
+		}
+
+		// evita di connettere pin dello stesso tipo
+		if(pin.constructor == this.constructor) {
+			console.debug("Avoided pin connection because of type mismatch");
+			return;
+		}
+
+		this.connectedPins.push(pin);
+		pin.connect(this);
+	}
+	
+	disconnect(pin) {
+		let index = this.connectedPins.indexOf(pin);
+
+		if (index !== -1) {
+			this.connectedPins.splice(index, 1);
+			pin.disconnect();
+		} else {
+			console.error("Cannot disconnect pin " + pin);
+		}
+	}
+
+	disconnectAll() {
+		for(let pin of this.connectedPins) {
+			pin.disconnect();
+		}
+
+		this.connectedPins = [];
 	}
 
 	set(value) {
@@ -143,7 +220,7 @@ class Component {
 	// genera i pin
 	createPins() {
 		// i pin di input stanno a sinistra
-		let pinX = -this.width / 2 * gridSize - pinRadius;
+		let pinX = -this.width / 2 * gridSize - gridSize / 2;
 		// disposti verticalmente a intervalli regolari centrati sull'asse orizzontale 
 		for(let i = 0; i < this.inputs.length; i++) {
 			let pinY = (i - this.inputs.length / 2 + 0.5) * gridSize * this.height * pinPercent; 	
@@ -153,13 +230,28 @@ class Component {
 		}
 		
 		// i pin di output stanno a destra
-		pinX = this.width / 2 * gridSize + pinRadius;
+		pinX = this.width / 2 * gridSize + gridSize / 2;
 		// come sopra
 		for(let i = 0; i < this.outputs.length; i++) {
 			let pinY = (i - this.outputs.length / 2 + 0.5) * gridSize * this.height * pinPercent; 	
 			
 			let pinPosition = new Vector(pinX, pinY);
 			this.outputs[i] = new OutputPin(this, i, pinPosition);
+		}
+	}
+
+	// scollega tutti i pin
+	clearPins() {
+		for(let input of this.inputs) {
+			// gli input devono scollegarsi dai loro output
+			let connectedPin = input.connectedPin;
+			if(connectedPin) {
+				connectedPin.disconnect(input);
+			}
+		}
+
+		for(let output of this.outputs) {
+			output.disconnectAll();
 		}
 	}
 
@@ -177,7 +269,7 @@ class Component {
 
 		if(pinPosition) {
 			// le posizioni dei pin sono relative rispetto ai componenti
-			pinPosition = addVector(position, pinPosition);
+			pinPosition = addVector(this.position, pinPosition);
 			return pinPosition;
 		}
 
@@ -186,14 +278,14 @@ class Component {
 
 	// controlla se si sta facendo hover su un pin e nel caso lo restituisce
 	hoveringPin(mousePosition) {
-		for(let pin of inputs) {
+		for(let pin of this.inputs) {
 			let pinPosition = pin.position;
 			if(circleHover(mousePosition, addVector(this.position, pinPosition), pinRadius)) {
 				return pin;
 			}
 		}
 
-		for(let pin of outputs) {
+		for(let pin of this.outputs) {
 			let pinPosition = pin.position;	
 			if(circleHover(mousePosition, addVector(this.position, pinPosition), pinRadius)) {
 				return pin;
@@ -229,7 +321,7 @@ class Component {
 	overlapPositions() {
 		let positions = [];
 		
-		// sostanzialmente vogliamo tutte le caselle della griglia coperte dal componente 
+		// sostanzialmente vogliamo tutte le caselle della griglia coperte dal componente
 		for(let x = 0; x < this.width; x++) {
 			for(let y = 0; y < this.height; y++) {
 				let posX = this.position.x + (x - this.width / 2 + 0.5) * gridSize;
@@ -243,45 +335,93 @@ class Component {
 	}
 
 	// disegna il componente
-	draw(ctx) {
+	draw(ctx, mousePosition, fade = false) {
 		// riporta le posizioni nell'angolo in alto a sinistra
 		let drawX = this.position.x - gridSize * this.width / 2;
 		let drawY = this.position.y - gridSize * this.height / 2;
 
-		// disegna il componente come un immagine vettoriale
-    ctx.drawImage(this.symbol, 
-									drawX, drawY, 
-									gridSize * this.width, gridSize * this.height);
+		// rendi meno opaco se fade è true
+		ctx.globalAlpha = fade ? componentFade : 1;
+		
+		ctx.drawImage(this.symbol, drawX, drawY, gridSize * this.width, gridSize * this.height);
 
-		// fai che i pin si disegnino 
-		for(let pin of inputs) {
-			pin.draw(ctx, this.position);
-		}
-		for(let pin of outputs) {
-			pin.draw(ctx, this.position);
+		//resetta l'opacità
+		ctx.globalAlpha = 1;
+
+		let hovPin = this.hoveringPin(mousePosition);
+
+		// disegna i pin
+		for(let pin of [...this.inputs, ...this.outputs]) {
+			let style = "default";
+			if(!fade && pin == hovPin) {
+				style = "hover";
+			}
+
+			pin.draw(ctx, this.position, style);
 		}
 	}
 }
 
 // morsetti di input / output
-class Input extends Component {
+class InOutComponent extends Component {
+	constructor(type, 
+							inputNum, outputNum, 		// pin 
+							width, height, 					// dimensioni
+							position,								// posizione
+							symbolSrc) {						// simbolo
+		super(type, inputNum, outputNum, width, height, position, symbolSrc);
+		
+		// valore logico
+		this.value = false;
+	}
+
+	draw(ctx, mousePosition, fade = false) {
+		super.draw(ctx, mousePosition, fade); 
+	
+		// disegna un indicatore del valore di value 
+		// interno
+		ctx.beginPath();
+		ctx.arc(this.position.x, this.position.y, ledRadius, 0, 2 * Math.PI);
+		ctx.fillStyle = this.value ? onColor : offColor;
+		ctx.fill();
+
+		// esterno
+		ctx.beginPath();
+		ctx.arc(this.position.x, this.position.y, ledRadius, 0, 2 * Math.PI);
+		ctx.strokeStyle = pinStrokeColor; 
+		ctx.lineWidth = pinStrokeWidth;
+		ctx.stroke();
+	}
+}
+
+class Input extends InOutComponent {
 	constructor(position) {
 		super("IN", 
 					0, 1, 		// pin 
 					2, 1,			// dimensioni
 					position,	// posizione
 					"./assets/img/symbols/in.svg"); // simbolo
+	}
 
-		// logic
-		this.value = false;
+	// restituisce il componente se si sta facendo hover sul pulsante
+	hoveringButton(mousePosition) {
+		if(circleHover(mousePosition, this.position, ledRadius)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	toggle() {
+		this.value = ~this.value;
 	}
 
 	evaluate() {
-		this.outputs[0].set(false);
+		this.outputs[0].set(this.value);
 	}
 }
 
-class Output extends Component {
+class Output extends InOutComponent {
 	constructor(position) {
 		super("OUT", 
 					1, 0, 		// pin 
@@ -289,12 +429,10 @@ class Output extends Component {
 					position, // posizione
 					"./assets/img/symbols/out.svg"); // simbolo
 
-		// valore logico 
-		this.val = false;
 	}	
 
 	evaluate() {
-		this.val = inputs[0].get();
+		this.value = this.inputs[0].get();
 	}
 }
 
@@ -379,7 +517,7 @@ class XORGate extends Component {
 	}
 
 	evaluate() {
-		this.outputs[0].set(this.inputs[0].get() != this.inputs[1].get());	
+		this.outputs[0].set(this.inputs[0].get() != this.inputs[1].get());
 	}
 }
 
