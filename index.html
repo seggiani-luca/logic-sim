@@ -9,17 +9,17 @@
 	<!-------------------- header -------------------->
 	<header class="header">
 		<div class="header-left">
-			<button type="button" class="stored-button"></button>
-			<button type="button" class="save-button primary-button">
+			<button type="button" class="stored-button" onclick="seeStored()"></button>
+			<button type="button" class="save-button primary-button" onclick="saveCircuit()">
 				Save
 			</button>
 		</button>
 		</div>
 		<div class="header-right">
-			<button type="button" class="login-button secondary-button">
+			<button type="button" class="login-button secondary-button" onclick="beginLogin()">
 				Log In
 			</button>
-			<button type="button" class="signup-button primary-button">
+			<button type="button" class="signup-button primary-button" onclick="beginSignup()">
 				Sign Up
 			</button>
 		</div>
@@ -37,4 +37,55 @@
 			</button> 
 		</section>
 	</body>
+	<!-------------------- save menu -------------------->
+	<div class="save-menu">
+		<div class="popup-shadow"></div>
+		<div class="popup-menu">
+			<h1>
+				Save circuit
+			</h1>
+			<p class="input-bar">
+				<input class="save-text" type="text" placeholder="Circuit name"></input>
+				<button type="button" class="save-confirm-button primary-button">
+					Save
+				</button>
+			</p>
+		</div>
+	</div>
+	<!-------------------- login menu -------------------->
+	<div class="login-menu">
+		<div class="popup-shadow"></div>
+		<div class="popup-menu">
+			<h1>
+				Log In
+			</h1>
+			<p class="input-bar">
+				<input class="login-username-text" type="text" placeholder="Username"></input>
+			</p>
+			<p class="input-bar">
+				<input class="login-password-text" type="password" placeholder="Password"></input>
+				<button type="button" class="login-confirm-button primary-button">
+					Log In
+				</button>
+			</p>
+		</div>
+	</div>
+	<!-------------------- signup menu -------------------->
+	<div class="signup-menu">
+		<div class="popup-shadow"></div>
+		<div class="popup-menu">
+			<h1>
+				Sign Up
+			</h1>
+			<p class="input-bar">
+				<input class="signup-username-text" type="text" placeholder="Username"></input>
+			</p>
+			<p class="input-bar">
+				<input class="signup-password-text" type="password" placeholder="Password"></input>
+				<button type="button" class="signup-confirm-button primary-button">
+					Sign Up
+				</button>
+			</p>
+		</div>
+	</div>
 </html>

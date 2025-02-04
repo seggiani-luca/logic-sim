@@ -135,3 +135,64 @@ body {
 	width: 100%;
 	height: 100%;
 }
+
+/* popups */
+.popup-menu {
+	padding: 10px;
+	position: absolute;
+	top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+	display: flex;
+	flex-direction: column;
+	background-color: white;
+	border-radius: 5px;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+	min-width: 500px;
+}
+
+.popup-shadow {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.15);
+}
+
+.popup-menu .input-bar {
+	margin: 0;
+	display: flex;
+}
+
+.popup-menu h1 {
+	margin: 0;
+	margin-bottom: 10px;
+	font-weight: normal;
+	font-size: 32px;
+}
+
+.popup-menu input {
+	margin: 5px;
+	width: 100%;
+	font-size: 16px;
+}
+
+.popup-menu button {
+	font-size: 16px;
+	padding: 2px;
+	margin: 5px;
+	min-width: 80px;
+}
+
+.popup-menu .primary-button {
+	background-color: var(--lightblue);
+	border: solid 1px var(--lightblue);
+	border-radius: 5px;
+	color: white;
+}
+
+.popup-menu .primary-button:hover {
+	background-color: var(--darkblue);
+	border: solid 1px var(--darkblue);
+}

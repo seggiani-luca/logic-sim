@@ -113,7 +113,7 @@ class Pin {
 }
 
 // pin di ingresso
-export class InputPin extends Pin {
+class InputPin extends Pin {
 	constructor(component, index, position) {
 		super("input", component, index, position);
 
@@ -153,7 +153,7 @@ export class InputPin extends Pin {
 }
 
 // pin di uscita
-export class OutputPin extends Pin {
+class OutputPin extends Pin {
 	constructor(component, index, position) {
 		super("output", component, index, position);
 		
@@ -227,7 +227,7 @@ export class OutputPin extends Pin {
 } 
 
 // classe base per i componenti
-export class Component {
+class Component {
 	constructor(type, 
 							inputNum, outputNum, 		// pin 
 							width, height, 					// dimensioni
@@ -444,7 +444,7 @@ class InOutComponent extends Component {
 	}
 }
 
-class Input extends InOutComponent {
+export class Input extends InOutComponent {
 	constructor(position) {
 		super("IN", 
 					0, 1, 		// pin 
@@ -471,7 +471,7 @@ class Input extends InOutComponent {
 	}
 }
 
-class Output extends InOutComponent {
+export class Output extends InOutComponent {
 	constructor(position) {
 		super("OUT", 
 					1, 0, 		// pin 
@@ -490,7 +490,7 @@ class Output extends InOutComponent {
 }
 
 // porte logiche 
-class NOTGate extends Component {
+export class NOTGate extends Component {
 	constructor(position) {
 		super("NOT", 
 					1, 1, 		// pin 
@@ -507,7 +507,7 @@ class NOTGate extends Component {
 	}
 }
 
-class ANDGate extends Component {
+export class ANDGate extends Component {
 	constructor(position) {
 		super("AND",
 					2, 1, 		// pin
@@ -519,13 +519,13 @@ class ANDGate extends Component {
 	evaluate() {
 		let in1 = this.inputs[0].get();
 		let in2 = this.inputs[1].get();
-		if((in1 == null) || (in2 == null)) return null;
+		if((in1 == null) && (in2 == null)) return null;
 
 		return this.outputs[0].set(in1 && in2);		
 	}
 }
 
-class NANDGate extends Component {
+export class NANDGate extends Component {
 	constructor(position) {
 		super("NAND",
 					2, 1, 		// pin
@@ -537,13 +537,13 @@ class NANDGate extends Component {
 	evaluate() {
 		let in1 = this.inputs[0].get();
 		let in2 = this.inputs[1].get();
-		if((in1 == null) || (in2 == null)) return null;
+		if((in1 == null) && (in2 == null)) return null;
 
 		return this.outputs[0].set(!(in1 && in2));		
 	}
 }
 
-class ORGate extends Component {
+export class ORGate extends Component {
 	constructor(position) {
 		super("OR",
 					2, 1, 		// pin
@@ -555,13 +555,13 @@ class ORGate extends Component {
 	evaluate() {
 		let in1 = this.inputs[0].get();
 		let in2 = this.inputs[1].get();
-		if((in1 == null) || (in2 == null)) return null;
+		if((in1 == null) && (in2 == null)) return null;
 
 		return this.outputs[0].set(in1 || in2);		
 	}
 }
 
-class NORGate extends Component {
+export class NORGate extends Component {
 	constructor(position) {
 		super("NOR",
 					2, 1, 		// pin
@@ -573,13 +573,13 @@ class NORGate extends Component {
 	evaluate() {
 		let in1 = this.inputs[0].get();
 		let in2 = this.inputs[1].get();
-		if((in1 == null) || (in2 == null)) return null;
+		if((in1 == null) && (in2 == null)) return null;
 
 		return this.outputs[0].set(!(in1 || in2));		
 	}
 }
 
-class XORGate extends Component {
+export class XORGate extends Component {
 	constructor(position) {
 		super("XOR",
 					2, 1, 		// pin
@@ -591,13 +591,13 @@ class XORGate extends Component {
 	evaluate() {
 		let in1 = this.inputs[0].get();
 		let in2 = this.inputs[1].get();
-		if((in1 == null) || (in2 == null)) return null;
+		if((in1 == null) && (in2 == null)) return null;
 
 		return this.outputs[0].set(in1 != in2);		
 	}
 }
 
-class XNORGate extends Component {
+export class XNORGate extends Component {
 	constructor(position) {
 		super("XNOR",
 					2, 1, 		// pin
@@ -609,7 +609,7 @@ class XNORGate extends Component {
 	evaluate() {
 		let in1 = this.inputs[0].get();
 		let in2 = this.inputs[1].get();
-		if((in1 == null) || (in2 == null)) return null;
+		if((in1 == null) && (in2 == null)) return null;
 
 		return this.outputs[0].set(in1 == in2);		
 	}

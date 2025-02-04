@@ -1,3 +1,0 @@
-- make bits remember component-relative position and calculate canvas position on their own, makes wire drawing easier
-- see if propagation works
-- turn interface logic into state machine

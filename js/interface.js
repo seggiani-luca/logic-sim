@@ -38,10 +38,10 @@ const headerHeight = 50;
 
 // elementi html 
 var deleteButtonElement;
-var loginButtonElement;
-var signupButtonElement;
-var saveButtonElement;
-var storedButtonElement;
+
+var loginMenu;
+var signupMenu;
+var saveMenu;
 
 // canvas
 var canvas;
@@ -324,37 +324,23 @@ function init() {
 	// ottieni gli elementi html 
 	// pulsante di rimozione componenti
 	deleteButtonElement = document.querySelector(".delete-button");
-	deleteButtonElement.classList.add("hide");
-	deleteButtonElement.addEventListener("click", (event) => {
-		deleteButtonHandler(event); 
-	});
+	
+	// gli altri pulsanti chiamano direttamente le loro funzioni
+	window.beginLogin = beginLogin;
+	window.beginSignup = beginSignup;
+	window.saveCircuit = saveCircuit;
+	window.seeStored = seeStored;
 
-	// pulsante di login 
-	loginButtonElement = document.querySelector(".login-button");
-	loginButtonElement.addEventListener("click", () => {
-		loginButtonHandler(); 
-	});
-	
-	// pulsante di signup 
-	signupButtonElement = document.querySelector(".signup-button");
-	signupButtonElement.addEventListener("click", () => {
-		signupButtonHandler(); 
-	});
-	
-	// pulsante di salvataggio 
-	saveButtonElement = document.querySelector(".save-button");
-	saveButtonElement.addEventListener("click", () => {
-		saveButtonHandler(); 
-	});
-	
-	// pulsante del menu circuiti salvati
-	storedButtonElement = document.querySelector(".stored-button");
-	storedButtonElement.addEventListener("click", () => {
-		storedButtonHandler(); 
-	});
+	// menu a comparsa
+	loginMenu = document.querySelector(".login-menu");
+	loginMenu.classList.add("hide");
+	signupMenu = document.querySelector(".signup-menu");
+	signupMenu.classList.add("hide");
+	saveMenu = document.querySelector(".save-menu");
+	saveMenu.classList.add("hide");
 
 	// lista dei componenti 
-	let componentListElement = document.querySelector(".component-list");	
+	let componentListElement = document.querySelector(".component-list");
 	initComponentList(componentListElement);
 
 	// canvas
@@ -473,19 +459,19 @@ function deleteButtonHandler(event) {
 }
 
 // gestisce il pulsante di login 
-function loginButtonHandler() {
+function beginLogin() {
 }
 
 // gestisce il pulsante di signup
-function signupButtonHandler() {
+function beginSignup() {
 }
 
 // gestisce il pulsante di salvataggio
-function saveButtonHandler() {
+function saveCircuit() {
 	let json = serializeCircuit(currentCircuit);
 	
 	console.debug("Current circuit JSON is:");
-	console.debug(json);
+	console.debug(JSON.parse(json));
 
 	let obj = rebuildCircuit(json);
 
@@ -494,10 +480,12 @@ function saveButtonHandler() {
 
 	console.debug("Swapping current circuit with rebuilt one... wish me luck!");
 	currentCircuit = obj;
+
+	updateLogic(currentCircuit.componentInstances);
 }
 
 // gestisce il pulsante del menu circuiti salvati
-function storedButtonHandler() {
+function seeStored() {
 }
 
 // disegna la griglia

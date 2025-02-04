@@ -1,88 +1,49 @@
 // importa costruttori di componenti e pin da component.ks
 import {
-	Component,
-	InputPin,
-	OutputPin
+	Input,
+	Output,
+	NOTGate,
+	ANDGate,
+	NANDGate,
+	ORGate,
+	NORGate,
+	XORGate,
+	XNORGate
 } from "./component.js"
 
 export function serializeCircuit(circuit) {
 	let obj = { circuitName: circuit.circuitName, componentInstances: [] };
 	let instances = circuit.componentInstances;
 
+	// serializza tutti i componenti
 	for(let instance of instances) {
 		obj.componentInstances.push(serializeInstance(instance, instances));
 	}
 
-	console.debug("Flattened object is:");
-	console.debug(obj);
-
 	let json = JSON.stringify(obj);
 	return json;
 }
-
-// Component:
-// constructor(type, 
-// 						inputNum, outputNum, 		// pin 
-// 						width, height, 					// dimensioni
-// 						position,								// posizione
-// 						symbolSrc) {						// simbolo
-
-// Pin:
-// constructor(component, index, position) {
 
 function serializeInstance(instance, instances) {
 	let obj = {};
 
 	// copia proprietà di base
 	obj.type = instance.type;
-	obj.inputNum = instance.inputs.Length;
-	obj.outputNum = instance.outputs.Length;
-	obj.width = instance.width;
-	obj.height = instance.width;
 	obj.position = instance.position;
-	obj.symbolSrc = instance.symbol.src;
 
-	obj.inputs = [];
 	obj.outputs = [];
-
-	// copia i pin di input
-	for(let pin of instance.inputs) {	
-		let pinCopy = {};
-		
-		pinCopy.index = pin.index;
-		pinCopy.position = pin.position;
-
-		// per gli input appiattisci il pin collegato
-		let connectedPin = { ...pin.connectedPin };
-		
-		let connectedComponentIdx = getInstanceIndex(connectedPin.component, instances);
-		let connectedPinIdx = connectedPin.index;
-
-		// appiattisci il pin a due indici: uno al componente e uno al pin nel componente
-		pinCopy.connectedPin = { componentIdx: connectedComponentIdx, pinIdx: connectedPinIdx };
-	
-		obj.inputs.push(pinCopy);
-	}
 
 	// copia i pin di output
 	for(let pin of instance.outputs) {
-		let pinCopy = {};
-
-		pinCopy.index = pin.index;
-		pinCopy.position = pin.position;
-
-		pin.connectedPins = [...pin.connectedPins];
-		pinCopy.connectedPins = [];
+		let pinCopy = { connectedPins: [] };
 
 		// per gli output appiattisci tutti i pin collegati
-		for(let i = 0; i < pin.connectedPins.length; i++) {
-			let connectedPin = { ...pin.connectedPins[i] };
-			
+		for(let connectedPin of pin.connectedPins) {	
 			let connectedComponentIdx = getInstanceIndex(connectedPin.component, instances);
 			let connectedPinIdx = connectedPin.index;
 
 			// appiattisci il pin a due indici: uno al componente e uno al pin nel componente
-			pinCopy.connectedPins[i] = { componentIdx: connectedComponentIdx, pinIdx: connectedPinIdx };
+			pinCopy.connectedPins.push({ componentIdx: connectedComponentIdx, pinIdx: connectedPinIdx });
 		}
 
 		obj.outputs.push(pinCopy);
@@ -104,46 +65,70 @@ function getInstanceIndex(instance, instances) {
 
 export function rebuildCircuit(json) {
 	let obj = JSON.parse(json);;
-	
-	let instances = obj.componentInstances;
 
+	let circuit = { circuitName: obj.circuitName, componentInstances: [] };
+
+	// ricostruisci tutti i componenti
+	let instances = obj.componentInstances;
 	for(let instance of instances) {
-		instance = rebuildInstance(instance, instances);		
+		circuit.componentInstances.push(rebuildInstance(instance, instances));
 	}
 
-	return obj;
+	// ristabilisci le connessioni fra componenti
+	for(let i = 0; i < instances.length; i++) {
+		rebuildConnections(instances[i], circuit.componentInstances[i], circuit.componentInstances);
+	}
+
+	return circuit;
 }
 
-function rebuildInstance(obj, instances) {
-	let instance = new Component(obj.type, 
-															 obj.inputNum, obj.outputNum,
-															 obj.width, obj.height, 		 
-															 obj.position,					 
-															 obj.symbolSrc);
+function rebuildInstance(obj) {
+	let instance;
 
-	// espandi i pin di input
-	for(let pin of obj.inputs) {
-		let pinInstance = new InputPin(instance, pin.pinIdx, pin.position);
-
-		let componentIdx = pin.connectedPin.componentIdx;
-		let pinIdx = pin.connectedPin.pinIdx;
-
-		pinInstance.connectedPin = instances[componentIdx].outputs[pinIdx];
+	switch(obj.type) {
+		case "IN":
+			instance = new Input(obj.position);
+			break;
+		case "OUT":
+			instance = new Output(obj.position);
+			break;
+		case "NOT":
+			instance = new NOTGate(obj.position);
+			break;
+		case "AND":
+			instance = new ANDGate(obj.position);
+			break;
+		case "NAND":
+			instance = new NANDGate(obj.position);
+			break;
+		case "OR":
+			instance = new ORGate(obj.position);
+			break;
+		case "NOR":
+			instance = new NORGate(obj.position);
+			break;
+		case "XOR":
+			instance = new XORGate(obj.position);
+			break;
+		case "XNOR":
+			instance = new XNORGate(obj.position);
+			break;
+		default:
+			console.error("Unkown component type " + obj.type);
 	}
 
-	// espandi i pin di output
-	for(let pin of obj.outputs) {
-		pin.component = obj;
-		
-		// per gli output appiattisci tutti i pin collegati
-		for(let i = 0; i < pin.connectedPins.length; i++) {
-			let connectedPin = pin.connectedPins[i];
+	return instance;
+}
 
+function rebuildConnections(obj, instance, instances) {
+	for(let i = 0; i < obj.outputs.length; i++) {
+		for(let connectedPin of obj.outputs[i].connectedPins) {
 			let componentIdx = connectedPin.componentIdx;
 			let pinIdx = connectedPin.pinIdx;
+			
+			let otherPin = instances[componentIdx].inputs[pinIdx];
 
-			connectedPin = instances[componentIdx].inputs[pinIdx];
-			pin.connectedPins[i] = connectedPin;
-		}
+			instance.outputs[i].connect(otherPin);
+		}	
 	}
 }
