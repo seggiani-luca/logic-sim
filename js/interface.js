@@ -567,6 +567,7 @@ function hidePopups() {
 
 // gestisce il pulsante di login
 function beginLogin() {
+	hidePopups();
 	loginMenu.classList.remove("hide");
 }
 async function loginConfirm() {
@@ -619,6 +620,7 @@ function setupLoggedSession(username) {
 
 // gestisce il pulsante di signup
 function beginSignup() {
+	hidePopups();
 	signupMenu.classList.remove("hide");
 }
 async function signupConfirm() {
@@ -656,6 +658,7 @@ async function signupConfirm() {
 async function saveCircuit() {
 	if(currentCircuit.circuitName == null) {
 		// se non c'è un nome, apri il menu
+		hidePopups();
 		saveMenu.classList.remove("hide");
 	} else {
 		// altrimenti carica e basta
@@ -699,6 +702,7 @@ function seeStored() {
 
 // gestisce il logout
 async function logoutConfirm() {
+	hidePopups();
 	let result = await logout();
 
 	switch(result) {
