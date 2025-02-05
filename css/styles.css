@@ -90,6 +90,9 @@ border: solid 1px var(--lightgray);
 	background-color: var(--lightgray);
 	mask: url("../assets/img/icons/hamburger.svg");
 	mask-size: contain;
+	/* versioni più vecchie di chrome richiedono la specifica webkit */
+	-webkit-mask: url(../assets/img/icons/hamburger.svg);
+    	-webkit-mask-size: contain;
 }
 
 .header .stored-button:hover {
