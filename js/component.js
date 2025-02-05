@@ -1,19 +1,28 @@
+// il modulo component.js si occupa di dichiarare i componenti e gestirne le connessioni e la 
+// simulazione 
+
 // importa da interface.js
-import { 
-	gridSize,						// dimensioni griglia
-	pinRadius,					// dimensioni pin
-	pinPercent, 
+import {
+	// dimensioni griglia
+	gridSize,
+	// dimensioni pin
+	pinRadius,
+	pinPercent,
 	pinStrokeWidth,
-	pinStrokeColor, 		// colori pin
+	// colori pin
+	pinStrokeColor,
 	pinInteriorDefault,
 	pinInteriorHover,
-	componentFade,			// sfumatura componenti in creazione
-	ledRadius,					// dimensioni e colori di led
+	// sfumatura componenti in creazione
+	componentFade,
+	// dimensioni e colori di led
+	ledRadius,
 	onColor,
 	offColor,
 	hizColor,
-	updateCanvas 				// funzione per l'aggiornamento dell'interfaccia (è il modo più veloce per 
-											// aggiornare l'interfaccia in fase di aggiornamento della logica) 
+	// funzione per l'aggiornamento dell'interfaccia (è il modo più veloce per
+	// aggiornare l'interfaccia in fase di aggiornamento della logica)
+	updateCanvas
 } from "./interface.js";
 
 // costanti di simulazione
@@ -37,24 +46,21 @@ function addVector(vec1, vec2) {
 function quantize(a, mod) {
 	return Math.round(a / mod) * mod;
 }
-
 function quantizeVec(vec, mod) {
-	return new Vector(quantize(vec.x, mod), 
-										quantize(vec.y, mod));
+	return new Vector(quantize(vec.x, mod), quantize(vec.y, mod));
 }
 
 // utilità per il rilevamento di hover
 function rectHover(hoverPos, center, width, height) {
 	let xFits = hoverPos.x < center.x + width / 2 && hoverPos.x > center.x - width / 2;
 	let yFits = hoverPos.y < center.y + height / 2 && hoverPos.y > center.y - height / 2;
-	
+
 	return xFits && yFits;
 }
-
 function circleHover(hoverPos, center, radius) {
 	let radiusSqr = radius ** 2;
 	let distanceSqr = (center.x - hoverPos.x) ** 2 + (center.y - hoverPos.y) ** 2;
-	
+
 	return distanceSqr < radiusSqr;
 }
 
@@ -64,7 +70,7 @@ class Pin {
 		// tipo di pin (input, output)
 		this.type = type;
 
-		// riferimento al componente padre 
+		// riferimento al componente padre
 		this.component = component;
 		// indice nel padre
 		this.index = index;
@@ -73,7 +79,7 @@ class Pin {
 		this.position = position;
 
 		// la logica di connessione è piuttosto asimmetrica e viene implementata nelle specializzazioni
-		// l'idea di base è che OutputPin si connette ad InputPin, e non viceversa (sia qui che 
+		// l'idea di base è che OutputPin si connette ad InputPin, e non viceversa (sia qui che
 		// nell'interfaccia)
 	}
 
@@ -87,11 +93,11 @@ class Pin {
 		let xPos = this.position.x + base.x;
 		let yPos = this.position.y + base.y;
 
-		// interno 
+		// interno
 		ctx.beginPath();
 		ctx.arc(xPos, yPos, pinRadius, 0, 2 * Math.PI);
 
-		// disegna diversamente l'interno a seconda dello stato corrente 
+		// disegna diversamente l'interno a seconda dello stato corrente
 		switch(style) {
 			case "hover":
 				ctx.fillStyle = pinInteriorHover;
@@ -102,8 +108,8 @@ class Pin {
 		}
 
 		ctx.fill();
-		
-		// esterno 
+
+		// esterno
 		ctx.beginPath();
 		ctx.arc(xPos, yPos, pinRadius, 0, 2 * Math.PI);
 		ctx.lineWidth = pinStrokeWidth;
@@ -133,9 +139,9 @@ class InputPin extends Pin {
 		// connettiti al nuovo pin
 		this.connectedPin = pin;
 	}
-	
-	// la funzione disconnect() degli InputPin verrà, come sopra, chiamata da un OutputPin. ci 
-	// aspettiamo che lato OutputPin tutto sia in ordine, quindi ci limitiamo ad annullare il 
+
+	// la funzione disconnect() degli InputPin verrà, come sopra, chiamata da un OutputPin. ci
+	// aspettiamo che lato OutputPin tutto sia in ordine, quindi ci limitiamo ad annullare il
 	// riferimento
 	disconnect() {
 		this.connectedPin = null;
@@ -156,15 +162,15 @@ class InputPin extends Pin {
 class OutputPin extends Pin {
 	constructor(component, index, position) {
 		super("output", component, index, position);
-		
+
 		// l'OutputPin tiene conto del suo valore
 		this.value = null;
-		
-		// possiamo connetterci a più di un InputPin 
+
+		// possiamo connetterci a più di un InputPin
 		this.connectedPins = [];
 	}
 
-	// la funzione connect() degli OutputPin si occupa di connettere un InputPin e segnalargli la 
+	// la funzione connect() degli OutputPin si occupa di connettere un InputPin e segnalargli la
 	// connessione
 	connect(pin) {
 		// evita aliasing
@@ -173,7 +179,7 @@ class OutputPin extends Pin {
 			console.debug("Avoided pin connection because of same connection aliasing");
 			return;
 		}
-		
+
 		if(this === pin) {
 			console.debug("Avoided pin connection because of self-self aliasing");
 			return;
@@ -190,7 +196,7 @@ class OutputPin extends Pin {
 		// segnala che ti sei connesso
 		pin.connect(this);
 	}
-	
+
 	// la funzione disconnect() deglli OutputPin prende un riferimento ad un pin, e lo disconnette se
 	// gli è connesso, segnalandogli la disconnessione
 	disconnect(pin) {
@@ -214,31 +220,31 @@ class OutputPin extends Pin {
 	}
 
 	// imposta il valore del pin, propaga, e restituisce true se è cambiato qualcosa
-	set(value) {	
-		console.debug("Pin at index " + this.index + " of component " + this.component.type + 
-								" is being set to value " + value);
+	set(value) {
+		console.debug("Pin at index " + this.index + " of component " + this.component.type +
+		              " is being set to value " + value);
 
 		let changed = value != this.value;
 
 		this.value = value;
 
-		updateCanvas(); // dobbiamo aggiornare qui	
+		updateCanvas(); // dobbiamo aggiornare qui
 		return changed;
 	}
-} 
+}
 
 // classe base per i componenti
 class Component {
-	constructor(type, 
-							inputNum, outputNum, 		// pin 
-							width, height, 					// dimensioni
-							position,								// posizione
-							symbolSrc) {						// simbolo
+	constructor(type,
+	            inputNum, outputNum, // pin
+	            width, height,       // dimensioni
+	            position,            // posizione
+	            symbolSrc) {         // simbolo
 
 		// tipo di componente (AND, OR, ecc...)
 		this.type = type;
 
-		// geometria 
+		// geometria
 		this.width = width;
 		this.height = height;
 		this.position = position;
@@ -258,20 +264,20 @@ class Component {
 	createPins() {
 		// i pin di input stanno a sinistra
 		let pinX = -this.width / 2 * gridSize - gridSize / 2;
-		// disposti verticalmente a intervalli regolari centrati sull'asse orizzontale 
+		// disposti verticalmente a intervalli regolari centrati sull'asse orizzontale
 		for(let i = 0; i < this.inputs.length; i++) {
-			let pinY = (i - this.inputs.length / 2 + 0.5) * gridSize * this.height * pinPercent; 	
-			
+			let pinY = (i - this.inputs.length / 2 + 0.5) * gridSize * this.height * pinPercent;
+
 			let pinPosition = new Vector(pinX, pinY);
 			this.inputs[i] = new InputPin(this, i, pinPosition);
 		}
-		
+
 		// i pin di output stanno a destra
 		pinX = this.width / 2 * gridSize + gridSize / 2;
 		// come sopra
 		for(let i = 0; i < this.outputs.length; i++) {
-			let pinY = (i - this.outputs.length / 2 + 0.5) * gridSize * this.height * pinPercent; 	
-			
+			let pinY = (i - this.outputs.length / 2 + 0.5) * gridSize * this.height * pinPercent;
+
 			let pinPosition = new Vector(pinX, pinY);
 			this.outputs[i] = new OutputPin(this, i, pinPosition);
 		}
@@ -323,7 +329,7 @@ class Component {
 		}
 
 		for(let pin of this.outputs) {
-			let pinPosition = pin.position;	
+			let pinPosition = pin.position;
 			if(circleHover(mousePosition, addVector(this.position, pinPosition), pinRadius)) {
 				return pin;
 			}
@@ -350,20 +356,20 @@ class Component {
 	// controlla se si sta facendo hover sul componente
 	hovering(mousePosition) {
 		return rectHover(mousePosition,
-										 this.position, 
-										 this.width * gridSize, this.height * gridSize);
+		                 this.position,
+		                 this.width * gridSize, this.height * gridSize);
 	}
 
 	// ottiene un array di posizioni su cui controllare collisioni con altri componenti
 	overlapPositions() {
 		let positions = [];
-		
+
 		// sostanzialmente vogliamo tutte le caselle della griglia coperte dal componente
 		for(let x = 0; x < this.width; x++) {
 			for(let y = 0; y < this.height; y++) {
 				let posX = this.position.x + (x - this.width / 2 + 0.5) * gridSize;
 				let posY = this.position.y + (y - this.height / 2 + 0.5) * gridSize;
-				
+
 				positions.push(new Vector(posX, posY));
 			}
 		}
@@ -379,7 +385,7 @@ class Component {
 
 		// rendi meno opaco se fade è true
 		ctx.globalAlpha = fade ? componentFade : 1;
-		
+
 		// disegna l'immagine vettoriale che rappresenta il componente stesso
 		ctx.drawImage(this.symbol, drawX, drawY, gridSize * this.width, gridSize * this.height);
 
@@ -402,25 +408,25 @@ class Component {
 
 // morsetti di input / output
 class InOutComponent extends Component {
-	constructor(type, 
-							inputNum, outputNum, 		// pin 
-							width, height, 					// dimensioni
-							position,								// posizione
-							symbolSrc) {						// simbolo
+	constructor(type,
+	            inputNum, outputNum, // pin
+	            width, height,       // dimensioni
+	            position,            // posizione
+	            symbolSrc) {         // simbolo
 		super(type, inputNum, outputNum, width, height, position, symbolSrc);
-		
+
 		// valore logico
 		this.value = false;
 	}
 
 	draw(ctx, mousePosition, fade = false) {
-		super.draw(ctx, mousePosition, fade); 
-	
-		// disegna un indicatore del valore di value 
+		super.draw(ctx, mousePosition, fade);
+
+		// disegna un indicatore del valore di value
 		// interno
 		ctx.beginPath();
 		ctx.arc(this.position.x, this.position.y, ledRadius, 0, 2 * Math.PI);
-		
+
 		// il colore varia in base al valore di value
 		switch(this.value) {
 			case false:
@@ -439,7 +445,7 @@ class InOutComponent extends Component {
 		// esterno
 		ctx.beginPath();
 		ctx.arc(this.position.x, this.position.y, ledRadius, 0, 2 * Math.PI);
-		ctx.strokeStyle = pinStrokeColor; 
+		ctx.strokeStyle = pinStrokeColor;
 		ctx.lineWidth = pinStrokeWidth;
 		ctx.stroke();
 	}
@@ -447,11 +453,11 @@ class InOutComponent extends Component {
 
 export class Input extends InOutComponent {
 	constructor(position) {
-		super("IN", 
-					0, 1, 		// pin 
-					2, 1,			// dimensioni
-					position,	// posizione
-					"./assets/img/symbols/in.svg"); // simbolo
+		super("IN",
+		      0, 1,     // pin
+		      2, 1,     // dimensioni
+		      position, // posizione
+		      "./assets/img/symbols/in.svg"); // simbolo
 	}
 
 	// restituisce il componente se si sta facendo hover sul pulsante
@@ -474,15 +480,15 @@ export class Input extends InOutComponent {
 
 export class Output extends InOutComponent {
 	constructor(position) {
-		super("OUT", 
-					1, 0, 		// pin 
-					2, 1,			// dimensioni
-					position, // posizione
-					"./assets/img/symbols/out.svg"); // simbolo
+		super("OUT",
+		      1, 0,     // pin
+		      2, 1,     // dimensioni
+		      position, // posizione
+		      "./assets/img/symbols/out.svg"); // simbolo
 
 		// gli output partono in alta impedenza
 		this.value = null;
-	}	
+	}
 
 	evaluate() {
 		this.value = this.inputs[0].get();
@@ -490,14 +496,14 @@ export class Output extends InOutComponent {
 	}
 }
 
-// porte logiche 
+// porte logiche
 export class NOTGate extends Component {
 	constructor(position) {
-		super("NOT", 
-					1, 1, 		// pin 
-					1, 1,			// dimensioni
-					position, // posizione
-					"./assets/img/symbols/not.svg"); // simbolo
+		super("NOT",
+		      1, 1,     // pin
+		      1, 1,     // dimensioni
+		      position, // posizione
+		      "./assets/img/symbols/not.svg"); // simbolo
 	}
 
 	evaluate() {
@@ -507,17 +513,17 @@ export class NOTGate extends Component {
 			return null;
 		}
 
-		return this.outputs[0].set(!in1);	
+		return this.outputs[0].set(!in1);
 	}
 }
 
 export class ANDGate extends Component {
 	constructor(position) {
 		super("AND",
-					2, 1, 		// pin
-					2, 2, 		// dimensioni
-					position,	// posizione
-					"./assets/img/symbols/and.svg"); // simbolo
+		      2, 1,     // pin
+		      2, 2,     // dimensioni
+		      position, // posizione
+		      "./assets/img/symbols/and.svg"); // simbolo
 	}
 
 	evaluate() {
@@ -528,17 +534,17 @@ export class ANDGate extends Component {
 			return null;
 		}
 
-		return this.outputs[0].set(in1 && in2);		
+		return this.outputs[0].set(in1 && in2);
 	}
 }
 
 export class NANDGate extends Component {
 	constructor(position) {
 		super("NAND",
-					2, 1, 		// pin
-					2, 2, 		// dimensioni
-					position,	// posizione
-					"./assets/img/symbols/nand.svg"); // simbolo
+		      2, 1,     // pin
+		      2, 2,     // dimensioni
+		      position, // posizione
+		      "./assets/img/symbols/nand.svg"); // simbolo
 	}
 
 	evaluate() {
@@ -550,17 +556,17 @@ export class NANDGate extends Component {
 		}
 
 
-		return this.outputs[0].set(!(in1 && in2));		
+		return this.outputs[0].set(!(in1 && in2));
 	}
 }
 
 export class ORGate extends Component {
 	constructor(position) {
 		super("OR",
-					2, 1, 		// pin
-					2, 2, 		// dimensioni
-					position, // posizione
-					"./assets/img/symbols/or.svg"); // simbolo
+		      2, 1,     // pin
+		      2, 2,     // dimensioni
+		      position, // posizione
+		      "./assets/img/symbols/or.svg"); // simbolo
 	}
 
 	evaluate() {
@@ -572,17 +578,17 @@ export class ORGate extends Component {
 		}
 
 
-		return this.outputs[0].set(in1 || in2);		
+		return this.outputs[0].set(in1 || in2);
 	}
 }
 
 export class NORGate extends Component {
 	constructor(position) {
 		super("NOR",
-					2, 1, 		// pin
-					2, 2, 		// dimensioni
-					position, // posizione
-					"./assets/img/symbols/nor.svg"); // simbolo
+		      2, 1,     // pin
+		      2, 2,     // dimensioni
+		      position, // posizione
+		      "./assets/img/symbols/nor.svg"); // simbolo
 	}
 
 	evaluate() {
@@ -594,17 +600,17 @@ export class NORGate extends Component {
 		}
 
 
-		return this.outputs[0].set(!(in1 || in2));		
+		return this.outputs[0].set(!(in1 || in2));
 	}
 }
 
 export class XORGate extends Component {
 	constructor(position) {
 		super("XOR",
-					2, 1, 		// pin
-					2, 2, 		// dimensioni
-					position, // posizione
-					"./assets/img/symbols/xor.svg"); // simbolo
+		      2, 1,     // pin
+		      2, 2,     // dimensioni
+		      position, // posizione
+		      "./assets/img/symbols/xor.svg"); // simbolo
 	}
 
 	evaluate() {
@@ -616,17 +622,17 @@ export class XORGate extends Component {
 		}
 
 
-		return this.outputs[0].set(in1 != in2);		
+		return this.outputs[0].set(in1 != in2);
 	}
 }
 
 export class XNORGate extends Component {
 	constructor(position) {
 		super("XNOR",
-					2, 1, 		// pin
-					2, 2, 		// dimensioni
-					position, // posizione
-					"./assets/img/symbols/xnor.svg"); // simbolo
+		      2, 1,     // pin
+		      2, 2,     // dimensioni
+		      position, // posizione
+		      "./assets/img/symbols/xnor.svg"); // simbolo
 	}
 
 	evaluate() {
@@ -638,11 +644,11 @@ export class XNORGate extends Component {
 		}
 
 
-		return this.outputs[0].set(in1 == in2);		
+		return this.outputs[0].set(in1 == in2);
 	}
 }
 
-// tutti i componenti definiti sopra sono accessibili da qui all'interfaccia 
+// tutti i componenti definiti sopra sono accessibili da qui all'interfaccia
 export const inoutComponents = [
 	{ name: "Input", icon: "./assets/img/icons/in_icon.svg", type: Input },
 	{ name: "Output", icon: "./assets/img/icons/out_icon.svg", type: Output }
@@ -662,9 +668,9 @@ export const gateComponents = [
 export function updateLogic(components) {
 	for(let i = 0; i < simMaxIters; i++) {
 		console.debug("Processing logic at iteration " + i);
-		
+
 		let stable = true;
-		
+
 		// aggiorna tutti i componenti
 		for(let instance of components) {
 			if(instance.evaluate()) {
@@ -672,7 +678,7 @@ export function updateLogic(components) {
 				stable = false;
 			}
 		}
-	
+
 		// se non ci sono stati cambiamenti di variabili logiche, esci
 		if(stable) break;
 	}

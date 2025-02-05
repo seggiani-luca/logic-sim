@@ -1,4 +1,5 @@
 <?php
+	// ottiene dal database il circuito legato ad una coppia nome utente - circuito
 	include "config.php";
 
 	// connettiti al database
@@ -20,7 +21,7 @@
 		// ottieni un result set
 		$result = mysqli_stmt_get_result($statement);
 		$row = mysqli_fetch_assoc($result);
-		
+
 		if($row) {
 			// se esiste, restituisci il json
 			echo $row["circuit"];

@@ -1,4 +1,5 @@
 <?php
+	// ottiene tutti i circuiti legati all'utente corrente
 	session_start();
 	include "config.php";
 

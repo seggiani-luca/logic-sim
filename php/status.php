@@ -1,4 +1,5 @@
 <?php
+	// ottiene lo stato corrente della sessione
 	session_start();
 
 	if(isset($_SESSION["username"])) {

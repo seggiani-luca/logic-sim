@@ -1,4 +1,5 @@
 <?php
+	// effettua il login di un utente
 	session_start();
 	include "config.php";
 
@@ -24,10 +25,10 @@
 
 		$result = mysqli_stmt_get_result($statement);
 		$row = mysqli_fetch_assoc($result);
-		
+
 		if($row) {
 			// trovato, controlla la password
-			if (password_verify($password, $row["password"])) {	
+			if (password_verify($password, $row["password"])) {
 				$_SESSION["username"] = $username;
 				echo "success";
 			} else {

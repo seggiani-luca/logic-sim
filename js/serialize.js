@@ -1,4 +1,6 @@
-// importa costruttori di componenti e pin da component.ks
+// il modulo serialize.js fornisce funzioni per la serializzazione e deserializzazione di circuiti
+
+// importa costruttori di componenti e pin da component.js
 import {
 	Input,
 	Output,
@@ -11,6 +13,7 @@ import {
 	XNORGate
 } from "./component.js"
 
+// serializza un circuito
 export function serializeCircuit(circuit) {
 	let obj = { circuitName: circuit.circuitName, componentInstances: [] };
 	let instances = circuit.componentInstances;
@@ -24,6 +27,7 @@ export function serializeCircuit(circuit) {
 	return json;
 }
 
+// serializza un istanza di componente
 function serializeInstance(instance, instances) {
 	let obj = {};
 
@@ -38,7 +42,7 @@ function serializeInstance(instance, instances) {
 		let pinCopy = { connectedPins: [] };
 
 		// per gli output appiattisci tutti i pin collegati
-		for(let connectedPin of pin.connectedPins) {	
+		for(let connectedPin of pin.connectedPins) {
 			let connectedComponentIdx = getInstanceIndex(connectedPin.component, instances);
 			let connectedPinIdx = connectedPin.index;
 
@@ -52,10 +56,11 @@ function serializeInstance(instance, instances) {
 	return obj;
 }
 
+// ottiene l'indice di un istanza all'interno di un array di istanze
 function getInstanceIndex(instance, instances) {
 	// trova l'indice dell'istanza
 	let index = instances.indexOf(instance);
-	
+
 	if (index !== -1) {
 		return index;
 	} else {
@@ -63,6 +68,7 @@ function getInstanceIndex(instance, instances) {
 	}
 }
 
+// ricostruisce il circuito dall'oggetto serializzato
 export function rebuildCircuit(obj) {
 	let circuit = { circuitName: obj.circuitName, componentInstances: [] };
 
@@ -80,6 +86,7 @@ export function rebuildCircuit(obj) {
 	return circuit;
 }
 
+// ricostruisce un istanza dall'oggetto serializzato
 function rebuildInstance(obj) {
 	let instance;
 
@@ -118,15 +125,16 @@ function rebuildInstance(obj) {
 	return instance;
 }
 
+// rimette al loro posto le connessioni delle istanze ricostruite
 function rebuildConnections(obj, instance, instances) {
 	for(let i = 0; i < obj.outputs.length; i++) {
 		for(let connectedPin of obj.outputs[i].connectedPins) {
 			let componentIdx = connectedPin.componentIdx;
 			let pinIdx = connectedPin.pinIdx;
-			
+
 			let otherPin = instances[componentIdx].inputs[pinIdx];
 
 			instance.outputs[i].connect(otherPin);
-		}	
+		}
 	}
 }

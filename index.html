@@ -1,120 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8"/>
+		<meta charset="utf-8">
 		<title>logic-sim</title>
-		<link rel="stylesheet" href="./css/styles.css"/>
+		<link rel="stylesheet" href="./css/styles.css">
 		<script type="module" src="./js/interface.js"></script>
 	</head>
-	<!-------------------- header -------------------->
-	<header class="header">
-		<div class="header-left">
-			<button type="button" class="stored-button" onclick="seeStored()"></button>
-			<button type="button" class="save-button primary-button" onclick="saveCircuit()" disabled>
-				Save
-			</button>
-			<button type="button" class="new-button secondary-button" onclick="newCircuit()">
-				New
-			</button>
-			<p class="save-tooltip hide">
-				Saved!
-			</p>
-		</button>
-		</div>
-		<div class="header-right">
-			<p class="logged-user hide">	
-			</p>
-			<button type="button" class="login-button secondary-button" onclick="beginLogin()">
-				Log In
-			</button>
-			<button type="button" class="logout-button secondary-button hide" onclick="logoutConfirm()">
-				Log Out
-			</button>
-			<button type="button" class="signup-button primary-button" onclick="beginSignup()">
-				Sign Up
-			</button>
-		</div>
-	</header>
 	<body>
-		<!-------------------- component list -------------------->
+		<!-- header -->
+		<header class="header">
+			<div class="header-left">
+				<button type="button" class="stored-button" onclick="seeStored()"></button>
+				<button type="button" class="save-button primary-button" onclick="saveCircuit()" disabled>
+					Save
+				</button>
+				<button type="button" class="new-button secondary-button" onclick="newCircuit()">
+					New
+				</button>
+				<p class="save-tooltip hide">
+					Saved!
+				</p>
+			</div>
+			<div class="header-right">
+				<p class="logged-user hide">	
+				</p>
+				<button type="button" class="login-button secondary-button" onclick="beginLogin()">
+					Log In
+				</button>
+				<button type="button" class="logout-button secondary-button hide" onclick="logoutConfirm()">
+					Log Out
+				</button>
+				<button type="button" class="signup-button primary-button" onclick="beginSignup()">
+					Sign Up
+				</button>
+			</div>
+		</header>
+		<!-- component list -->
 		<aside class="component-list">
 		</aside>
-		<!-------------------- workspace -------------------->
-		<section class="workspace">
+		<!-- workspace -->
+		<div class="workspace">
 			<div class="canvas-container">
 				<canvas class="workspace-canvas" width="2000" height="2000">
 				</canvas>
 			</div>
 			<button type="button" class="canvas-button delete-button hide">
-				<img src="./assets/img/icons/delete.svg"/>
+				<img src="./assets/img/icons/delete.svg" alt="menu">
 			</button> 
-		</section>
-	</body>
-	<!-------------------- save menu -------------------->
-	<div class="save-menu hide">
-		<div class="popup-shadow" onclick="hidePopups()"></div>
-		<div class="popup-menu">
-			<h1>
-				Save circuit
-			</h1>
-			<p class="input-bar">
-				<input class="save-text" type="text" placeholder="Circuit name"></input>
-				<button type="button" class="save-confirm-button primary-button" onclick="saveConfirm()">
-					Save
-				</button>
-			</p>
 		</div>
-	</div>
-	<!-------------------- login menu -------------------->
-	<div class="login-menu hide">
-		<div class="popup-shadow" onclick="hidePopups()"></div>
-		<div class="popup-menu">
-			<h1>
-				Log In
-			</h1>
-			<p class="input-bar">
-				<input class="login-username-text" type="text" placeholder="Username"></input>
-			</p>
-			<p class="input-bar">
-				<input class="login-password-text" type="password" placeholder="Password"></input>
-				<button type="button" class="login-confirm-button primary-button" onclick="loginConfirm()">
-					Log In
-				</button>
-			</p>
-		</div>
-	</div>
-	<!-------------------- signup menu -------------------->
-	<div class="signup-menu hide">
-		<div class="popup-shadow" onclick="hidePopups()"></div>
-		<div class="popup-menu">
-			<h1>
-				Sign Up
-			</h1>
-			<p class="input-bar">
-				<input class="signup-username-text" type="text" placeholder="Username"></input>
-			</p>
-			<p class="input-bar">
-				<input class="signup-password-text" type="password" placeholder="Password"></input>
-				<button type="button" class="signup-confirm-button primary-button" 
-								onclick="signupConfirm()">
-					Sign Up
-				</button>
-			</p>
-		</div>
-	</div>
-	<!-------------------- stored menu -------------------->
-	<div class="stored-menu hide">
-		<div class="popup-shadow" onclick="hidePopups()"></div>
-		<div class="popup-menu">
-			<h1>
-				Saved circuits
-			</h1>
-			<p class="empty-circuits">
-				You didn't save any circuits yet.
-			</p>
-			<!-- user circuits -->
-			<div class="user-circuits">
+		<!-- save menu -->
+		<div class="save-menu hide">
+			<div class="popup-shadow" onclick="hidePopups()"></div>
+			<div class="popup-menu">
+				<h1>
+					Save circuit
+				</h1>
+				<p class="input-bar">
+					<input class="save-text" type="text" placeholder="Circuit name">
+					<button type="button" class="save-confirm-button primary-button" onclick="saveConfirm()">
+						Save
+					</button>
+				</p>
 			</div>
 		</div>
-	</div>
+		<!-- login menu -->
+		<div class="login-menu hide">
+			<div class="popup-shadow" onclick="hidePopups()"></div>
+			<div class="popup-menu">
+				<h1>
+					Log In
+				</h1>
+				<p class="input-bar">
+					<input class="login-username-text" type="text" placeholder="Username">
+				</p>
+				<p class="input-bar">
+					<input class="login-password-text" type="password" placeholder="Password">
+					<button type="button" class="login-confirm-button primary-button" onclick="loginConfirm()">
+						Log In
+					</button>
+				</p>
+			</div>
+		</div>
+		<!-- signup menu -->
+		<div class="signup-menu hide">
+			<div class="popup-shadow" onclick="hidePopups()"></div>
+			<div class="popup-menu">
+				<h1>
+					Sign Up
+				</h1>
+				<p class="input-bar">
+					<input class="signup-username-text" type="text" placeholder="Username">
+				</p>
+				<p class="input-bar">
+					<input class="signup-password-text" type="password" placeholder="Password">
+					<button type="button" class="signup-confirm-button primary-button" 
+									onclick="signupConfirm()">
+						Sign Up
+					</button>
+				</p>
+			</div>
+		</div>
+		<!-- stored menu -->
+		<div class="stored-menu hide">
+			<div class="popup-shadow" onclick="hidePopups()"></div>
+			<div class="popup-menu">
+				<h1>
+					Saved circuits
+				</h1>
+				<p class="empty-circuits">
+					You didn't save any circuits yet.
+				</p>
+				<!-- user circuits -->
+				<div class="user-circuits">
+				</div>
+			</div>
+		</div>
+	</body>
 </html>

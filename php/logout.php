@@ -1,4 +1,5 @@
 <?php
+	// chiude la sessione di un utente
 	session_start();
 
 	// annulla la sessione
@@ -9,6 +10,6 @@
 	setcookie(session_name(), '', time() - 3600, '/');
 
 	echo "success";
-	
+
 	exit;
 ?>

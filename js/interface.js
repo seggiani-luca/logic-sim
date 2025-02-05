@@ -1,3 +1,7 @@
+// il modulo interface.js si occupa di inizializzare e gestire l'interfaccia utente, riferendosi al
+// modulo component.js per i componenti del circuito e la gestione della simulazione, e al modulo 
+// session.js
+
 // importa da component.js
 import {
 	// classi dei componenti
@@ -92,12 +96,20 @@ var loggedUserText;
 const nameRegex = /^[A-Za-z1-9 ]+$/;
 
 // canvas
+var canvasContainer;
 var canvas;
 var ctx;
 
 // il circuito in elaborazione
 var currentCircuit = { circuitName: null, componentInstances: [] };
 window.currentCircuit = currentCircuit; // debug
+
+window.handler = handler; // debug
+
+// variabili di stato del mouse
+var mousePosition = new Vector();
+var rawMousePosition = new Vector();
+var mouseOnCanvas = false;
 
 // dichiarazione della classe InterfaceHandler, che implementa la macchina a stati che gestisce
 // l'interfaccia
@@ -289,12 +301,6 @@ class InterfaceHandler {
 // un istanza dell'oggetto handler gestisce tutta l'interfaccia utente
 var handler = new InterfaceHandler();
 
-window.handler = handler; // debug
-
-// variabili di stato del mouse
-var mousePosition = new Vector();
-var mouseOnCanvas = false;
-
 // inizializza l'interfaccia
 function init() {
 	// ottieni gli elementi html
@@ -357,6 +363,7 @@ function init() {
 	initComponentList(componentListElement);
 
 	// canvas
+	canvasContainer = document.querySelector(".canvas-container");
 	canvas = document.querySelector(".workspace-canvas");
 	ctx = canvas.getContext("2d");
 
@@ -390,6 +397,16 @@ function init() {
 		// gestisce i click sulla finestra (per la macchina a stati sono tutti a vuoto, eventuali 
 		// operazioni vengono svolte dalle funzioni chiamate dai pulsanti premuti) 
 		windowClickHandler();
+	});
+
+	// se ci si sposta sul canvas bisogna ricalcolare la posizione del mouse e ridisegnare
+	canvasContainer.addEventListener("scroll", () => {
+		// non abbiamo informazioni sul mouse, usa le precedenti
+		let mouse = {};
+		mouse.clientX = rawMousePosition.x;
+		mouse.clientY = rawMousePosition.y;
+
+		mouseHandler(mouse);
 	});
 }
 
@@ -488,6 +505,10 @@ function canvasToScreen(pos) {
 function mouseHandler(event) {
 	// converti la posizione
 	mousePosition = screenToCanvas(event.clientX, event.clientY);
+
+	// tieni traccia dell'ultima posizione
+	rawMousePosition = new Vector(event.clientX, event.clientY);
+	
 	// aggiorna il canvas
 	updateCanvas();
 }
@@ -632,13 +653,17 @@ async function signupConfirm() {
 }
 
 // gestisce il pulsante di salvataggio
-function saveCircuit() {
+async function saveCircuit() {
 	if(currentCircuit.circuitName == null) {
 		// se non c'è un nome, apri il menu
 		saveMenu.classList.remove("hide");
 	} else {
 		// altrimenti carica e basta
-		uploadCircuit(currentCircuit);
+		await uploadCircuit(currentCircuit);
+		
+		// aggiorna i circuiti dell'utente (potrebbe servire comunque se un utente sta copiando il 
+		// circuito di un altro utente)
+		setupCircuits();
 
 		// segnala il salvataggio per 3 secondi
 		saveTooltip.classList.remove("hide");
@@ -654,7 +679,7 @@ async function saveConfirm() {
 	if(name != "" && nameRegex.test(name)) {
 		// è valido, assegnalo e salva
 		currentCircuit.circuitName = name;
-		uploadCircuit(currentCircuit);
+		await uploadCircuit(currentCircuit);
 
 		// aggiorna i circuiti dell'utente
 		setupCircuits();
@@ -717,7 +742,7 @@ function drawGrid() {
 
 // disegna un filo di connessione fra pin
 function drawWire(startPos, endPos, color) {
-  ctx.beginPath();
+	ctx.beginPath();
 
 	ctx.lineWidth = wireWidth;
 	ctx.strokeStyle = color;
@@ -727,10 +752,10 @@ function drawWire(startPos, endPos, color) {
 	let offset = Math.abs((endPos.x - startPos.x) / 2);
 
 	let cp1 = new Vector(startPos.x + offset, startPos.y);
-  let cp2 = new Vector(endPos.x - offset, endPos.y);
+	let cp2 = new Vector(endPos.x - offset, endPos.y);
 
-  ctx.moveTo(startPos.x, startPos.y);
-  ctx.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, endPos.x, endPos.y);
+	ctx.moveTo(startPos.x, startPos.y);
+	ctx.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, endPos.x, endPos.y);
 
 	ctx.stroke();
 }
@@ -830,13 +855,13 @@ function createComponent(instance) {
 
 	// ordina i componenti
 	currentCircuit.componentInstances.sort((a, b) => {
-    function getTypePriority(component) {
-			if (component instanceof Input) return 0; 	// gli input vanno per primi
-			if (component instanceof Output) return 2; 	// gli output per ultimi
-			return 1;																		// tutto il resto a metà
-    }
+		function getTypePriority(component) {
+			if (component instanceof Input) return 0;   // gli input vanno per primi
+			if (component instanceof Output) return 2;  // gli output per ultimi
+			return 1;                                   // tutto il resto a metà
+		}
 
-    return getTypePriority(a) - getTypePriority(b);
+		return getTypePriority(a) - getTypePriority(b);
 	});
 }
 

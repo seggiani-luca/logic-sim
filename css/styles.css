@@ -36,6 +36,7 @@ body {
 	justify-content: space-between;
 	background-color: var(--darkgray);
 	color: white;
+	z-index: 1;
 }
 
 .header-left, .header-right {
@@ -87,7 +88,7 @@ border: solid 1px var(--lightgray);
 	width: 25px;
 	height: 25px;
 	background-color: var(--lightgray); 
-  mask: url("../assets/img/icons/hamburger.svg") no-repeat center;
+  mask: url("../assets/img/icons/hamburger.svg");
   mask-size: contain;
 }
 

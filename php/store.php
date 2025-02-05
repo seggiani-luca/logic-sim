@@ -1,4 +1,5 @@
 <?php
+	// carica un circuito sul server
 	session_start();
 	include "config.php";
 
@@ -27,7 +28,7 @@
 	// inserisci nel database
 	$query = "insert into circuits (user, name, circuit) values ('$username', '$name', '$escapedData') on duplicate key update circuit = values(circuit)";
 
-	if ($connection->query($query) === TRUE) {
+	if (mysqli_query($connection, $query)) {
 		echo "Circuit stored succesfully";
 	} else {
 		echo "Failed to store circuit: " . $connection->error;

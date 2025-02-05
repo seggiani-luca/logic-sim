@@ -1,4 +1,5 @@
 <?php
+	// effettua il signup di un utente
 	session_start();
 	include "config.php";
 
@@ -30,7 +31,7 @@
 
 		$result = mysqli_stmt_get_result($statement);
 		$row = mysqli_fetch_assoc($result);
-		
+
 		if($row) {
 			// l'utente esiste già
 			echo "failure";
@@ -38,11 +39,11 @@
 		} else {
 			// non esiste, crealo
 			$hashed_password = password_hash($password, PASSWORD_DEFAULT);
-		
+
 			// inserisci nel database
 			$query = "insert into users (username, password) values ('$username', '$hashed_password')";
 
-			if ($connection->query($query) === TRUE) {
+			if (mysqli_query($connection, $query)) {
 				echo "success";
 			} else {
 				echo "failure";
