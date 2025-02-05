@@ -92,6 +92,9 @@ var signupPasswordText;
 // segnalatore dell'utente connesso
 var loggedUserText;
 
+// avviso nessun circuito creato
+var emptyCircuitText;
+
 // validazione
 const nameRegex = /^[A-Za-z1-9 ]+$/;
 
@@ -357,6 +360,7 @@ function init() {
 
 	// menu circuiti salvati
 	userCircuits = document.querySelector(".user-circuits");
+	emptyCircuitText = document.querySelector(".empty-circuits");
 
 	// lista dei componenti
 	let componentListElement = document.querySelector(".component-list");
@@ -425,11 +429,13 @@ async function setupCircuits() {
 
 	let circuits = await fetchCircuits();
 
+	// in caso fosse stato nascosto
+	emptyCircuitText.classList.remove("hide");
+
 	// se l'utente non ha circuiti, esci
 	if(circuits.length == 0) return;
 
 	// nascondi l'avviso di nessun circuito creato
-	let emptyCircuitText = document.querySelector(".empty-circuits");
 	emptyCircuitText.classList.add("hide");
 
 	// crea un link per ogni circuito
@@ -713,6 +719,8 @@ async function logoutConfirm() {
 			logoutButton.classList.add("hide");
 			loggedUserText.classList.add("hide");
 
+			// dimenticati i circuiti
+			setupCircuits();
 			break;
 		case "failure":
 			alert("Couldn't logout");

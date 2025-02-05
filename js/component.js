@@ -667,21 +667,33 @@ export const gateComponents = [
 
 // aggiorna la logica dei componenti
 export function updateLogic(components) {
-	for(let i = 0; i < simMaxIters; i++) {
+	// mantieni un insieme dei componenti da aggiornare
+	let queue = new Set(components);
+
+	for (let i = 0; i < simMaxIters; i++) {
 		console.debug("Processing logic at iteration " + i);
 
+		// l'insieme alla prossima iterazione
+		let nextQueue = new Set();
 		let stable = true;
 
-		// aggiorna tutti i componenti
-		for(let instance of components) {
-			if(instance.evaluate()) {
+		for (let instance of queue) {
+			if (instance.evaluate()) {
 				console.debug("Component " + instance.type + " was unstable, doing another iteration");
 				stable = false;
+
+				// aggiungi i suoi successori
+				for(let pin of instance.outputs) {
+					for(let connectedPin of pin.connectedPins) {
+						nextQueue.add(connectedPin.component);
+					}
+				}
 			}
 		}
 
-		// se non ci sono stati cambiamenti di variabili logiche, esci
-		if(stable) break;
+		if (stable) break;
+		queue = nextQueue;
 	}
+
 	console.debug("Logic processing stopped");
 }

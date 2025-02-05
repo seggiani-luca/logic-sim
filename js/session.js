@@ -195,7 +195,7 @@ export async function fetchCircuits() {
 	})
 	.then(response => response.json())
 	.then(data => {
-		console.log(data);
+		console.debug(data);
 		return data;
 	})
 	.catch(error => {

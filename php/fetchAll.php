@@ -9,7 +9,12 @@
 		die("Connection to database failed: " . $connection->connect_error);
 	}
 
-	if(!isset($_SESSION["username"])) die("Expected user session");
+	// restituisci un array vuota se non c'è un utente in sessione
+	if(!isset($_SESSION["username"])) {
+		echo json_encode([]);
+		exit;
+	}
+	
 	$user = $_SESSION["username"];
 
 	$query = "select * from circuits where user = ?";
@@ -25,14 +30,14 @@
 		$names = array();
 
 		while ($row = mysqli_fetch_assoc($result)) {
-      $names[] = array($row["name"]);
+			$names[] = array($row["name"]);
 		}
 
 		echo json_encode($names);
 
 		// libera lo statement
 		mysqli_free_result($result);
-    mysqli_stmt_close($statement);
+		mysqli_stmt_close($statement);
 	}
 
 	// chiudi la connessione
