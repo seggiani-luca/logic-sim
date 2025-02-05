@@ -63,9 +63,7 @@ function getInstanceIndex(instance, instances) {
 	}
 }
 
-export function rebuildCircuit(json) {
-	let obj = JSON.parse(json);;
-
+export function rebuildCircuit(obj) {
 	let circuit = { circuitName: obj.circuitName, componentInstances: [] };
 
 	// ricostruisci tutti i componenti

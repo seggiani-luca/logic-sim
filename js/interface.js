@@ -1,9 +1,11 @@
 // importa da component.js 
 import {
+	Input,						// per l'ordinamento dei componenti
+	Output,
 	Vector,						// classe vettore 2d 
 	inoutComponents,	// componenti di input/output e gate
 	gateComponents,
-	updateLogic	// funzione per l'aggiornamento della logica
+	updateLogic				// funzione per l'aggiornamento della logica
 } from "./component.js"
 
 // importa da serialize.js
@@ -39,9 +41,30 @@ const headerHeight = 50;
 // elementi html 
 var deleteButtonElement;
 
+var saveButton;
+
 var loginMenu;
 var signupMenu;
 var saveMenu;
+
+var saveText;
+var saveTooltip;
+
+var loginUsernameText;
+var loginPasswordText;
+
+var signupUsernameText;
+var signupPasswordText;
+
+var loggedUserText;
+
+// validazione
+const nameRegex = /^[A-Za-z1-9 ]+$/;
+const usernameRegex = /^[A-Za-z1-9 _]+$/;
+const passwordRegex = /^[A-Za-z1-9 _]+$/;
+
+// sessione
+var loggedInUser = null;
 
 // canvas
 var canvas;
@@ -324,20 +347,42 @@ function init() {
 	// ottieni gli elementi html 
 	// pulsante di rimozione componenti
 	deleteButtonElement = document.querySelector(".delete-button");
+	deleteButtonElement.addEventListener("click", deleteButtonHandler);
 	
 	// gli altri pulsanti chiamano direttamente le loro funzioni
+	window.hidePopups = hidePopups;
+	
 	window.beginLogin = beginLogin;
 	window.beginSignup = beginSignup;
 	window.saveCircuit = saveCircuit;
 	window.seeStored = seeStored;
 
+	window.saveConfirm = saveConfirm;
+
+	window.loginConfirm = loginConfirm;
+	window.signupConfirm = signupConfirm;
+
+	// il pulsante di salvataggio può essere disattivato
+	saveButton = document.querySelector(".save-button");
+
 	// menu a comparsa
 	loginMenu = document.querySelector(".login-menu");
-	loginMenu.classList.add("hide");
 	signupMenu = document.querySelector(".signup-menu");
-	signupMenu.classList.add("hide");
 	saveMenu = document.querySelector(".save-menu");
-	saveMenu.classList.add("hide");
+
+	// menu salvataggio
+	saveText = document.querySelector(".save-text");
+	saveTooltip = document.querySelector(".save-tooltip");
+
+	// menu login
+	loginUsernameText = document.querySelector(".login-username-text");
+	loginPasswordText = document.querySelector(".login-password-text");
+	
+	// menu signup
+	signupUsernameText = document.querySelector(".signup-username-text");
+	signupPasswordText = document.querySelector(".signup-password-text");
+
+	loggedUserText = document.querySelector(".logged-user");
 
 	// lista dei componenti 
 	let componentListElement = document.querySelector(".component-list");
@@ -383,6 +428,45 @@ function init() {
 	window.addEventListener("click", () => {
 		windowClickHandler();
 	});
+
+	// gestisci il caricamento di un eventuale circuito all'apertura della pagina
+	window.onload = () => {
+		let params = new URLSearchParams(window.location.search);
+
+		let id = params.get("id");	
+		if(id != null) {
+			loadCircuit(id);
+		}
+	}
+}
+
+function loadCircuit(id) {
+	console.debug("Loading circuit with id " + id);
+
+	fetch("php/fetch.php/?id=" + id, {
+		method: "GET",
+		headers: {
+    	"Content-Type": "application/json",
+  	},
+	})
+  .then(response => response.json()) 
+  .then(data => {
+		console.debug("Fetched JSON: ");
+  	console.debug(data);
+
+		if(data == "empty") {
+			console.debug("No circuit to load, skipping...");
+			return;
+		}
+
+		// carica il circuito
+		currentCircuit = rebuildCircuit(data);
+		updateCanvas();
+		updateLogic(currentCircuit.componentInstances)
+	})
+  .catch(error => {
+    console.error("Circuit fetching error:", error);
+  });
 }
 
 // utilità per le trasformazioni da schermo a canvas 
@@ -458,30 +542,165 @@ function deleteButtonHandler(event) {
 	handler.transition("deleteButtonClick", null);
 }
 
+// chiude tutti i menu a comparsa
+function hidePopups() {
+	loginMenu.classList.add("hide");
+	signupMenu.classList.add("hide");
+	saveMenu.classList.add("hide");
+}
+
 // gestisce il pulsante di login 
 function beginLogin() {
+	loginMenu.classList.remove("hide");
+}
+
+function loginConfirm() {
+	// ottieni username e password
+	let username = loginUsernameText.value;
+	let password = loginPasswordText.value;
+
+	// convalida username
+	if(username == "" || !usernameRegex.test(username)) {
+		loginUsernameText.setCustomValidity("Invalid username, use digits, letters, spaces or underscores");
+		loginUsernameText.reportValidity();
+		return;
+	}
+	
+	// convalida password
+	if(password == "" || !passwordRegex.test(username)) {
+		loginPasswordText.setCustomValidity("Invalid password, use digits, letters, spaces or underscores");
+		loginPasswordText.reportValidity();
+		return;
+	}
+
+	// tutto valido, prova il login
+	fetch("php/login.php", {
+		method: "POST",
+		headers: {
+    	"Content-Type": "application/json",
+  	},
+		body: JSON.stringify({ username: username, password: password })
+	})
+  .then(response => response.text()) 
+  .then(data => {
+		if(data == "success") {
+			loggedInUser = username;
+			
+			// mostra l'utente corrente
+			loggedUserText.textContent = "Logged in as " + username;
+			loggedUserText.classList.remove("hide");
+
+			saveButton.removeAttribute("disabled");
+
+			loginMenu.classList.add("hide");
+		} else if(data == "failure") {
+			alert("Couldn't log in");	
+		}
+	})
+  .catch(error => {
+    console.error("Login error:", error);
+  });
 }
 
 // gestisce il pulsante di signup
 function beginSignup() {
+	signupMenu.classList.remove("hide");
+}
+
+function signupConfirm() {
+	let username = signupUsernameText.value;
+	let password = signupPasswordText.value;
+
+	if(username == "" || !usernameRegex.test(username)) {
+		signupUsernameText.setCustomValidity("Invalid username, use digits, letters, spaces or underscores");
+		signupUsernameText.reportValidity();
+		return;
+	}
+	
+	if(password == "" || !passwordRegex.test(username)) {
+		signupPasswordText.setCustomValidity("Invalid password, use digits, letters, spaces or underscores");
+		signupPasswordText.reportValidity();
+		return;
+	}
+	
+	// tutto valido, prova il signup
+	fetch("php/signup.php", {
+		method: "POST",
+		headers: {
+    	"Content-Type": "application/json",
+  	},
+		body: JSON.stringify({ username: username, password: password })
+	})
+  .then(response => response.text()) 
+  .then(data => {
+		if(data == "success") {
+			alert("Signed up succesfully, log in with your new credentials");	
+
+			// mostra il menu di login
+			signupMenu.classList.add("hide");
+			loginMenu.classList.remove("hide");
+		} else if(data == "failure") {
+			alert("Couldn't sign up");	
+		}
+	})
+  .catch(error => {
+    console.error("Login error:", error);
+  });
 }
 
 // gestisce il pulsante di salvataggio
 function saveCircuit() {
+	// se non c'è un nome, apri il menu
+	if(currentCircuit.circuitName == null) {
+		saveMenu.classList.remove("hide");
+	} else {
+		uploadCircuit();
+		
+		saveTooltip.classList.remove("hide");
+		setTimeout(() => {
+			saveTooltip.classList.add("hide");	
+		}, 3000);
+	}
+}
+
+function saveConfirm() {
+	let name = saveText.value;
+
+	// controlla se il nome è vallido
+	if(name != "" && nameRegex.test(name)) {
+		// è valido, assegnalo e salva
+		currentCircuit.circuitName = name;
+		uploadCircuit();
+
+		// chiudi il menu
+		saveMenu.classList.add("hide");
+	} else {
+		saveText.setCustomValidity("Invalid name, use digits, letters, spaces");
+		saveText.reportValidity();
+	}
+}
+
+function uploadCircuit() {
+	// prima serializza il circuito
 	let json = serializeCircuit(currentCircuit);
 	
 	console.debug("Current circuit JSON is:");
 	console.debug(JSON.parse(json));
 
-	let obj = rebuildCircuit(json);
-
-	console.debug("Rebuilt circuit is:");
-	console.debug(obj);
-
-	console.debug("Swapping current circuit with rebuilt one... wish me luck!");
-	currentCircuit = obj;
-
-	updateLogic(currentCircuit.componentInstances);
+	fetch("php/store.php", {
+		method: "POST",
+		headers: {
+    	"Content-Type": "application/json",
+  	},
+		body: json
+	})
+  .then(response => response.text()) 
+  .then(data => {
+		console.debug("Stored circuit: " + data);
+	})
+  .catch(error => {
+    console.error("Circuit storing error: ", error);
+  });
 }
 
 // gestisce il pulsante del menu circuiti salvati
@@ -622,6 +841,17 @@ function createComponent(instance) {
 
 	// tutto ok, crea
 	currentCircuit.componentInstances.push(instance);
+
+	// ordina i componenti
+	currentCircuit.componentInstances.sort((a, b) => {
+    function getTypePriority(component) {
+			if (component instanceof Input) return 0; 	// gli input vanno per primi
+			if (component instanceof Output) return 2; 	// gli output per ultimi
+			return 1;																		// tutto il resto a metà
+    }
+
+    return getTypePriority(a) - getTypePriority(b);
+	});
 }
 
 // elimina un'istanza di componente

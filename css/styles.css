@@ -4,6 +4,7 @@
 	--lightblue: #2f72dc;
 	--darkblue: #1f62cc;
 	--darkgray: #2a2a2a;
+	--medgray: #555555;
 }
 
 html, body {
@@ -60,6 +61,16 @@ body {
 	border: solid 1px var(--darkblue);
 }
 
+.header .primary-button:disabled {
+	background-color: var(--medgray);
+	border: solid 1px var(--medgray);
+}
+
+.header .primary-button:disabled:hover {
+	background-color: var(--medgray);
+	border: solid 1px var(--medgray);
+}
+
 .header .secondary-button {
 	background-color: transparent;
 	border: solid 1px var(--lightgray);
@@ -82,6 +93,10 @@ body {
 
 .header .stored-button:hover {
 	background-color: white;
+}
+
+.header p {
+	margin: 5px;
 }
 
 /* component-list */
@@ -187,12 +202,11 @@ body {
 
 .popup-menu .primary-button {
 	background-color: var(--lightblue);
-	border: solid 1px var(--lightblue);
-	border-radius: 5px;
+	border: none;
+	border-radius: 3px;
 	color: white;
 }
 
 .popup-menu .primary-button:hover {
 	background-color: var(--darkblue);
-	border: solid 1px var(--darkblue);
 }

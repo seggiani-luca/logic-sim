@@ -219,6 +219,7 @@ class OutputPin extends Pin {
 								" is being set to value " + value);
 
 		let changed = value != this.value;
+
 		this.value = value;
 
 		updateCanvas(); // dobbiamo aggiornare qui	
@@ -501,7 +502,10 @@ export class NOTGate extends Component {
 
 	evaluate() {
 		let in1 = this.inputs[0].get();
-		if(in1 == null) return null;
+		if(in1 == null) {
+			this.outputs[0].set(null);
+			return null;
+		}
 
 		return this.outputs[0].set(!in1);	
 	}
@@ -519,7 +523,10 @@ export class ANDGate extends Component {
 	evaluate() {
 		let in1 = this.inputs[0].get();
 		let in2 = this.inputs[1].get();
-		if((in1 == null) && (in2 == null)) return null;
+		if((in1 == null) && (in2 == null)) {
+			this.outputs[0].set(null);
+			return null;
+		}
 
 		return this.outputs[0].set(in1 && in2);		
 	}
@@ -537,7 +544,11 @@ export class NANDGate extends Component {
 	evaluate() {
 		let in1 = this.inputs[0].get();
 		let in2 = this.inputs[1].get();
-		if((in1 == null) && (in2 == null)) return null;
+		if((in1 == null) && (in2 == null)) {
+			this.outputs[0].set(null);
+			return null;
+		}
+
 
 		return this.outputs[0].set(!(in1 && in2));		
 	}
@@ -555,7 +566,11 @@ export class ORGate extends Component {
 	evaluate() {
 		let in1 = this.inputs[0].get();
 		let in2 = this.inputs[1].get();
-		if((in1 == null) && (in2 == null)) return null;
+		if((in1 == null) && (in2 == null)) {
+			this.outputs[0].set(null);
+			return null;
+		}
+
 
 		return this.outputs[0].set(in1 || in2);		
 	}
@@ -573,7 +588,11 @@ export class NORGate extends Component {
 	evaluate() {
 		let in1 = this.inputs[0].get();
 		let in2 = this.inputs[1].get();
-		if((in1 == null) && (in2 == null)) return null;
+		if((in1 == null) && (in2 == null)) {
+			this.outputs[0].set(null);
+			return null;
+		}
+
 
 		return this.outputs[0].set(!(in1 || in2));		
 	}
@@ -591,7 +610,11 @@ export class XORGate extends Component {
 	evaluate() {
 		let in1 = this.inputs[0].get();
 		let in2 = this.inputs[1].get();
-		if((in1 == null) && (in2 == null)) return null;
+		if((in1 == null) && (in2 == null)) {
+			this.outputs[0].set(null);
+			return null;
+		}
+
 
 		return this.outputs[0].set(in1 != in2);		
 	}
@@ -609,7 +632,11 @@ export class XNORGate extends Component {
 	evaluate() {
 		let in1 = this.inputs[0].get();
 		let in2 = this.inputs[1].get();
-		if((in1 == null) && (in2 == null)) return null;
+		if((in1 == null) && (in2 == null)) {
+			this.outputs[0].set(null);
+			return null;
+		}
+
 
 		return this.outputs[0].set(in1 == in2);		
 	}
