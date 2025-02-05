@@ -304,7 +304,7 @@ class Component {
 
 		if(type === "input") {
 			// vogliamo che le posizioni siano oggetti indipendenti
-			// nota: si userebbe structuredCopy(), ma non è compatibile con browser vecchi
+			// nota: si userebbe structuredClone(), ma non è compatibile con browser vecchi
 			pinPosition = pinPosition = JSON.parse(JSON.stringify(this.inputs[i].position));
 		} else if(type === "output") {
 			// come sopra
