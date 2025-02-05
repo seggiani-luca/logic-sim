@@ -1,4 +1,5 @@
 <?php
+	session_start();
 	include "config.php";
 
 	// connettiti al database
@@ -7,27 +8,26 @@
 		die("Connection to database failed: " . $connection->connect_error);
 	}
 
-	// cerca il circuito
-	$query = "select * from circuits where user = ? and name = ?";
-	$user = $_GET["user"];
-	$name = $_GET["name"];
+	if(!isset($_SESSION["username"])) die("Expected user session");
+	$user = $_SESSION["username"];
+
+	$query = "select * from circuits where user = ?";
 
 	if($statement = mysqli_prepare($connection , $query)) {
 		// sostituisci il parametro in get
-		mysqli_stmt_bind_param($statement, "ss", $user, $name);
+		mysqli_stmt_bind_param($statement, "s", $user);
 		mysqli_stmt_execute($statement);
 
 		// ottieni un result set
 		$result = mysqli_stmt_get_result($statement);
-		$row = mysqli_fetch_assoc($result);
-		
-		if($row) {
-			// se esiste, restituisci il json
-			echo $row["circuit"];
-		} else {
-			// altrimenti restituisci un oggetto vuoto
-			echo json_encode("empty");
+
+		$names = array();
+
+		while ($row = mysqli_fetch_assoc($result)) {
+      $names[] = array($row["name"]);
 		}
+
+		echo json_encode($names);
 
 		// libera lo statement
 		mysqli_free_result($result);

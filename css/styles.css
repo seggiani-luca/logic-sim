@@ -73,7 +73,7 @@ body {
 
 .header .secondary-button {
 	background-color: transparent;
-	border: solid 1px var(--lightgray);
+border: solid 1px var(--lightgray);
 	border-radius: 5px;
 	color: var(--lightgray);
 }
@@ -132,11 +132,26 @@ body {
 
 .component img {
 	padding: 10px;
+	height: 70%;
 }
 
 /* workspace */
 .workspace {
 	grid-area: workspace;
+	overflow: hidden;
+	min-width: 0;
+}
+
+.canvas-container {
+	overflow: auto;
+	width: 100%;
+	height: 100%;
+	min-width: 0;
+	min-height: 0;
+}
+
+canvas {
+	display: block;
 }
 
 .canvas-button {
@@ -187,6 +202,13 @@ body {
 	font-size: 32px;
 }
 
+.popup-menu h2 {
+	margin: 0;
+	margin-bottom: 5px;
+	font-weight: normal;
+	font-size: 24px;
+}
+
 .popup-menu input {
 	margin: 5px;
 	width: 100%;
@@ -209,4 +231,27 @@ body {
 
 .popup-menu .primary-button:hover {
 	background-color: var(--darkblue);
+}
+
+.popup-menu a {
+	display: block;
+	box-sizing: border-box;
+	padding: 5px;
+	font-size: 20px;
+	color: black;
+	background-color: white;
+	text-decoration: none;
+	border-radius: 5px;
+	width: 100%;
+}
+
+.example-circuits, .user-circuits {
+	display: flex;
+	flex-direction: column;
+	overflow-y: scroll;
+	max-height: 300px;
+}
+
+.popup-menu a:hover {
+	background-color: var(--lightgray);
 }

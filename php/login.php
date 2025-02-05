@@ -1,4 +1,5 @@
 <?php
+	session_start();
 	include "config.php";
 
 	if(!$_SERVER["REQUEST_METHOD"] === "POST") die("Expected POST request");
@@ -27,7 +28,7 @@
 		if($row) {
 			// trovato, controlla la password
 			if (password_verify($password, $row["password"])) {	
-				$_SESSION["username"] = $user["username"];
+				$_SESSION["username"] = $username;
 				echo "success";
 			} else {
 				echo "failure";

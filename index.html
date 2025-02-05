@@ -13,6 +13,9 @@
 			<button type="button" class="save-button primary-button" onclick="saveCircuit()" disabled>
 				Save
 			</button>
+			<button type="button" class="new-button secondary-button" onclick="newCircuit()">
+				New
+			</button>
 			<p class="save-tooltip hide">
 				Saved!
 			</p>
@@ -23,6 +26,9 @@
 			</p>
 			<button type="button" class="login-button secondary-button" onclick="beginLogin()">
 				Log In
+			</button>
+			<button type="button" class="logout-button secondary-button hide" onclick="logoutConfirm()">
+				Log Out
 			</button>
 			<button type="button" class="signup-button primary-button" onclick="beginSignup()">
 				Sign Up
@@ -35,8 +41,10 @@
 		</aside>
 		<!-------------------- workspace -------------------->
 		<section class="workspace">
-			<canvas class="workspace-canvas">
-			</canvas>
+			<div class="canvas-container">
+				<canvas class="workspace-canvas" width="2000" height="2000">
+				</canvas>
+			</div>
 			<button type="button" class="canvas-button delete-button hide">
 				<img src="./assets/img/icons/delete.svg"/>
 			</button> 
@@ -92,6 +100,21 @@
 					Sign Up
 				</button>
 			</p>
+		</div>
+	</div>
+	<!-------------------- stored menu -------------------->
+	<div class="stored-menu hide">
+		<div class="popup-shadow" onclick="hidePopups()"></div>
+		<div class="popup-menu">
+			<h1>
+				Saved circuits
+			</h1>
+			<p class="empty-circuits">
+				You didn't save any circuits yet.
+			</p>
+			<!-- user circuits -->
+			<div class="user-circuits">
+			</div>
 		</div>
 	</div>
 </html>

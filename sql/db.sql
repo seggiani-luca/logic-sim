@@ -5,8 +5,10 @@ use seggiani_672343;
 
 -- circuiti
 create table circuits (
-	id char(8) primary key,
-	circuit json not null
+	user varchar(255),
+	name varchar(255), 
+	circuit json not null,
+	primary key (user, name)
 );
 
 -- utenti
