@@ -585,7 +585,7 @@ async function loginConfirm() {
 
 	switch(result) {
 		case "user-invalid":
-			loginUsernameText.setCustomValidity("Invalid username, use digits, letters, spaces or " +
+			loginUsernameText.setCustomValidity("Invalid username, use digits, letters spaces or " +
 			                                    "underscores");
 			loginUsernameText.reportValidity();
 			break;
@@ -696,7 +696,7 @@ async function saveConfirm() {
 		// chiudi il menu
 		saveMenu.classList.add("hide");
 	} else {
-		saveText.setCustomValidity("Invalid name, use digits, letters, spaces");
+		saveText.setCustomValidity("Invalid name, use digits, letters or spaces");
 		saveText.reportValidity();
 	}
 }
