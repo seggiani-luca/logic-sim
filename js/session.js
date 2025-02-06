@@ -34,7 +34,7 @@ export async function statusRequest() {
 		return null;
 	})
 	.catch(error => {
-		console.error("Login error:", error);
+		console.error("Status request error:", error);
 	});
 }
 
@@ -149,6 +149,7 @@ export async function loadCircuit(user, name) {
 		console.debug("Fetched JSON: ");
 		console.debug(data);
 
+		// controlla che non sia vuoto
 		if(data == "empty") {
 			console.debug("No circuit to load, skipping...");
 			return null;

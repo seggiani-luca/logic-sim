@@ -40,7 +40,7 @@
 
 		// libera lo statement
 		mysqli_free_result($result);
-    mysqli_stmt_close($statement);
+		mysqli_stmt_close($statement);
 	}
 
 	// chiudi la connessione

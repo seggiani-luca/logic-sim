@@ -5,8 +5,9 @@
 		<title>logic-sim</title>
 		<link rel="stylesheet" href="./css/styles.css">
 		<script type="module" src="./js/interface.js"></script>
+		<link rel="icon" type="image/svg+xml" href="./favicon.svg">
 	</head>
-	<body>
+	<body class="main-body">
 		<!-- header -->
 		<header class="header">
 			<div class="header-left">
@@ -21,13 +22,21 @@
 					Saved!
 				</p>
 			</div>
+			<div class="header-center">
+				<a class="about-link" href="./about.html">
+					<h1>
+						logic-sim
+					</h1>
+				</a>
+			</div>
 			<div class="header-right">
-				<p class="logged-user hide">	
+				<p class="logged-user hide">
 				</p>
 				<button type="button" class="login-button secondary-button" onclick="beginLogin()">
 					Log In
 				</button>
-				<button type="button" class="logout-button secondary-button hide" onclick="logoutConfirm()">
+				<button type="button" class="logout-button secondary-button hide"
+				        onclick="logoutConfirm()">
 					Log Out
 				</button>
 				<button type="button" class="signup-button primary-button" onclick="beginSignup()">
@@ -75,7 +84,8 @@
 				</p>
 				<p class="input-bar">
 					<input class="login-password-text" type="password" placeholder="Password">
-					<button type="button" class="login-confirm-button primary-button" onclick="loginConfirm()">
+					<button type="button" class="login-confirm-button primary-button"
+					        onclick="loginConfirm()">
 						Log In
 					</button>
 				</p>
@@ -94,7 +104,7 @@
 				<p class="input-bar">
 					<input class="signup-password-text" type="password" placeholder="Password">
 					<button type="button" class="signup-confirm-button primary-button" 
-									onclick="signupConfirm()">
+					        onclick="signupConfirm()">
 						Sign Up
 					</button>
 				</p>

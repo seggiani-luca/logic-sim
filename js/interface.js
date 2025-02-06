@@ -1,6 +1,6 @@
 // il modulo interface.js si occupa di inizializzare e gestire l'interfaccia utente, riferendosi al
 // modulo component.js per i componenti del circuito e la gestione della simulazione, e al modulo 
-// session.js
+// session.js per interfacciarsi col server
 
 // importa da component.js
 import {
@@ -105,13 +105,10 @@ var ctx;
 
 // il circuito in elaborazione
 var currentCircuit = { circuitName: null, componentInstances: [] };
-window.currentCircuit = currentCircuit; // debug
-
-window.handler = handler; // debug
 
 // variabili di stato del mouse
-var mousePosition = new Vector();
-var rawMousePosition = new Vector();
+var mousePosition = new Vector();    // la posizione sul canvas
+var rawMousePosition = new Vector(); // la posizione assoluta
 var mouseOnCanvas = false;
 
 // dichiarazione della classe InterfaceHandler, che implementa la macchina a stati che gestisce
@@ -191,7 +188,6 @@ class InterfaceHandler {
 								// e lo scolleghiamo (questo scollegerà il pin selezionato inizialmente)
 								connectedPin.disconnect(pin);
 
-
 								// ordina un aggiornamento della logica (hai disconnesso due componenti)
 								updateLogic(currentCircuit.componentInstances);
 							} else if(pin.type == "output") {
@@ -219,7 +215,7 @@ class InterfaceHandler {
 				switch(event) {
 					case "canvasClick":
 						if(!payload) {
-							// click su una zona vuota, prova a creare il componente (altre collisioni vengono
+							// click su una zona vuota, prova a creare il componente (le collisioni vengono
 							// verificate nella funzione createComponent())
 							createComponent(this.toCreateComponent)
 						}
@@ -301,7 +297,7 @@ class InterfaceHandler {
 	}
 }
 
-// un istanza dell'oggetto handler gestisce tutta l'interfaccia utente
+// un'istanza dell'oggetto handler gestisce tutta l'interfaccia utente
 var handler = new InterfaceHandler();
 
 // inizializza l'interfaccia
@@ -418,13 +414,14 @@ function init() {
 async function checkSession() {
 	let username = await statusRequest();
 	if(username) {
+		// c'è un utente connesso
 		setupLoggedSession(username);
-
 	}
 }
 
 // ottiene i circuiti dell utente
 async function setupCircuits() {
+	// ripulisci la lista circuiti
 	userCircuits.innerHTML = "";
 
 	let circuits = await fetchCircuits();
@@ -464,7 +461,7 @@ function newCircuit() {
 }
 
 // carica un eventuale circuito all'avvio della pagina
-async function checkCircuitLoad() {
+async function handleCircuitLoad() {
 	let params = new URLSearchParams(window.location.search);
 
 	let user = params.get("user");
@@ -489,7 +486,7 @@ async function checkCircuitLoad() {
 // utilità per le trasformazioni da schermo a canvas
 function screenToCanvas(x, y) { // questa prende una coppia di numeri e non un vettore, perchè è
                                 // quello che ci restituisce l'evento di spostamento del mouse
-  let rect = canvas.getBoundingClientRect();
+	let rect = canvas.getBoundingClientRect();
 
 	let posX = x - rect.left;
 	let posY = y - rect.top;
@@ -498,7 +495,7 @@ function screenToCanvas(x, y) { // questa prende una coppia di numeri e non un v
 }
 
 function canvasToScreen(pos) {
-  let rect = canvas.getBoundingClientRect();
+	let rect = canvas.getBoundingClientRect();
 
 	let posX = pos.x + rect.left;
 	let posY = pos.y + rect.top;
@@ -522,7 +519,7 @@ function mouseHandler(event) {
 // gestisce i click del mouse sul canvas
 function canvasClickHandler() {
 	for(let instance of currentCircuit.componentInstances) {
-		// controlliamo prima se si sta facendo hover su un pulsante del componente
+		// controlliamo prima se si sta facendo hover su un pulsante di un componente
 		if(instance.type == "IN" && instance.hoveringButton(mousePosition)) {
 			let payload = { type: "hoveringButton", which: instance };
 			handler.transition("canvasClick", payload);
@@ -545,7 +542,7 @@ function canvasClickHandler() {
 		}
 	}
 
-	// non stiamo facendo hover su nulla, lo rappresentiamo con um payload a null
+	// non stiamo facendo hover su nulla, lo rappresentiamo con un payload a null
 	handler.transition("canvasClick", null);
 }
 
@@ -789,6 +786,7 @@ export function updateCanvas() {
 	if(handler.state == "createComponent" && mouseOnCanvas) {
 		let component = handler.toCreateComponent;
 
+		// spostalo sul mouse
 		component.setPosition(mousePosition);
 		component.draw(ctx, mousePosition, true);
 	}
@@ -836,10 +834,10 @@ export function updateCanvas() {
 		let component = handler.currentComponent;
 		let center = canvasToScreen(component.position);
 
-		console.debug("Button placed at " + center.x + ", " + center.y);
-
 		deleteButtonElement.style.left = `${center.x}px`;
 		deleteButtonElement.style.top = `${center.y}px`;
+
+		console.debug("Button placed at " + center.x + ", " + center.y);
 
 		deleteButtonElement.classList.remove("hide");
 	} else {
@@ -890,7 +888,7 @@ function deleteComponent(instance) {
 		currentCircuit.componentInstances.splice(index, 1);
 		deleteButtonElement.classList.add("hide");
 	} else {
-		console.error("Cannot delete component instance " + instance);
+		console.error("Cannot delete component instance ", instance);
 	}
 }
 
@@ -909,6 +907,7 @@ function createComponentElement(component) {
 	componentElement.appendChild(componentName);
 
 	componentElement.addEventListener("click", (event) => {
+		// chiama l'handler per i nuovi componenti con il suo tipo di componente
 		newComponentHandler(event, component.type)
 	});
 
@@ -951,10 +950,10 @@ function initComponentList(componentList) {
 // chiama la init quando il DOM è pronto
 document.addEventListener("DOMContentLoaded", init);
 
-// gestisce il caricamento di un eventuale circuito all'apertura della pagina
+// gestisce la sessione all'apertura della pagina
 window.onload = () => {
 	// prima controlla la sessione
 	checkSession();
 	// poi carica il circuito, se serve
-	checkCircuitLoad();
+	handleCircuitLoad();
 }

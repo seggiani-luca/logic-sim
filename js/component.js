@@ -64,7 +64,7 @@ function circleHover(hoverPos, center, radius) {
 	return distanceSqr < radiusSqr;
 }
 
-// classe base per i pin
+// classe base per i pin dei componenti
 class Pin {
 	constructor(type, component, index, position) {
 		// tipo di pin (input, output)
@@ -128,8 +128,8 @@ class InputPin extends Pin {
 	}
 
 	// la funzione connect() degli InputPin verrà chiamata da un OutputPin. tutto quello che vogliamo
-	// fare qui è segnalare a un eventuale pin connesso che ci stiamo disconnettendo e connetterci al
-	// nuovo pin
+	// fare qui è segnalare a un eventuale pin già connesso che ci stiamo disconnettendo e 
+	// connetterci al nuovo pin
 	connect(pin) {
 		// se sei connesso a un pin, disconnettiti
 		if(this.connectedPin) {
@@ -141,7 +141,7 @@ class InputPin extends Pin {
 	}
 
 	// la funzione disconnect() degli InputPin verrà, come sopra, chiamata da un OutputPin. ci
-	// aspettiamo che lato OutputPin tutto sia in ordine, quindi ci limitiamo ad annullare il
+	// aspettiamo che lato OutputPin sia tutto in ordine, quindi ci limitiamo ad annullare il
 	// riferimento
 	disconnect() {
 		this.connectedPin = null;
@@ -208,7 +208,7 @@ class OutputPin extends Pin {
 			// segnala che ti sei disconnesso
 			pin.disconnect();
 		} else {
-			console.error("Cannot disconnect pin " + pin);
+			console.error("Cannot disconnect pin ", pin);
 		}
 	}
 
@@ -219,13 +219,14 @@ class OutputPin extends Pin {
 		}
 	}
 
-	// imposta il valore del pin, propaga, e restituisce true se è cambiato qualcosa
+	// imposta il valore del pin e restituisce true se è cambiato qualcosa
 	set(value) {
 		console.debug("Pin at index " + this.index + " of component " + this.component.type +
 		              " is being set to value " + value);
 
+		// rileva cambiamenti
 		let changed = value != this.value;
-
+		// aggiorna il valore
 		this.value = value;
 
 		updateCanvas(); // dobbiamo aggiornare qui
@@ -274,7 +275,7 @@ class Component {
 
 		// i pin di output stanno a destra
 		pinX = this.width / 2 * gridSize + gridSize / 2;
-		// come sopra
+		// come sopra, disposti verticalmente a intervalli regolari centrati sull'asse orizzontale
 		for(let i = 0; i < this.outputs.length; i++) {
 			let pinY = (i - this.outputs.length / 2 + 0.5) * gridSize * this.height * pinPercent;
 
@@ -286,13 +287,14 @@ class Component {
 	// disconnetti tutti i pin
 	clearPins() {
 		for(let input of this.inputs) {
-			// gli input devono disconnettersi dai loro output
+			// gli input devono farsi disconnettere dai loro output
 			let connectedPin = input.connectedPin;
 			if(connectedPin) {
 				connectedPin.disconnect(input);
 			}
 		}
-
+		
+		// poi disconnetti tutti gli output
 		for(let output of this.outputs) {
 			output.disconnectAll();
 		}
@@ -304,7 +306,7 @@ class Component {
 
 		if(type === "input") {
 			// vogliamo che le posizioni siano oggetti indipendenti
-			// nota: si userebbe structuredClone(), ma non è compatibile con browser vecchi
+			// nota: si userebbe structuredClone(), ma non è compatibile con browser più vecchi
 			pinPosition = pinPosition = JSON.parse(JSON.stringify(this.inputs[i].position));
 		} else if(type === "output") {
 			// come sopra
@@ -556,7 +558,6 @@ export class NANDGate extends Component {
 			return null;
 		}
 
-
 		return this.outputs[0].set(!(in1 && in2));
 	}
 }
@@ -577,7 +578,6 @@ export class ORGate extends Component {
 			this.outputs[0].set(null);
 			return null;
 		}
-
 
 		return this.outputs[0].set(in1 || in2);
 	}
@@ -600,7 +600,6 @@ export class NORGate extends Component {
 			return null;
 		}
 
-
 		return this.outputs[0].set(!(in1 || in2));
 	}
 }
@@ -622,7 +621,6 @@ export class XORGate extends Component {
 			return null;
 		}
 
-
 		return this.outputs[0].set(in1 != in2);
 	}
 }
@@ -643,7 +641,6 @@ export class XNORGate extends Component {
 			this.outputs[0].set(null);
 			return null;
 		}
-
 
 		return this.outputs[0].set(in1 == in2);
 	}

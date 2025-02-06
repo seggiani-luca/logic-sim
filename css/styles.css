@@ -19,7 +19,7 @@ html, body {
 }
 
 /* body */
-body {
+.main-body {
 	display: grid;
 	grid-template-areas: "header header"
 	                     "component-list workspace";
@@ -42,6 +42,26 @@ body {
 .header-left, .header-right {
 	display: flex;
 	align-items: center;
+}
+
+.header-center {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.header-center a {
+	color: white;
+	text-decoration: none;
+}
+
+.header-center a:hover {
+	color: white;
+	text-decoration: underline;
+}
+
+.header-center h1 {
+	margin: 0;
 }
 
 .header button {
@@ -92,7 +112,7 @@ border: solid 1px var(--lightgray);
 	mask-size: contain;
 	/* versioni più vecchie di chrome richiedono la specifica webkit */
 	-webkit-mask: url(../assets/img/icons/hamburger.svg);
-    	-webkit-mask-size: contain;
+	-webkit-mask-size: contain;
 }
 
 .header .stored-button:hover {
@@ -206,13 +226,6 @@ canvas {
 	font-size: 32px;
 }
 
-.popup-menu h2 {
-	margin: 0;
-	margin-bottom: 5px;
-	font-weight: normal;
-	font-size: 24px;
-}
-
 .popup-menu input {
 	margin: 5px;
 	width: 100%;
@@ -258,4 +271,36 @@ canvas {
 
 .popup-menu a:hover {
 	background-color: var(--lightgray);
+}
+
+/* about */
+.about-body {
+	display: grid;
+	grid-template-areas: "header"
+	                     "main";
+	grid-template-rows: 50px 1fr;
+	grid-template-columns: 1fr;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+main {
+	grid-area: main;
+	margin: 0 auto;
+	max-width: 800px;
+	font-size: 18px;
+}
+
+.green {
+	font-weight: bold;
+	color: #3fff00;
+}
+
+.red {
+	font-weight: bold;
+	color: #ff2400;
+}
+
+.gray {
+	font-weight: bold;
+	color: #555555;
 }

@@ -26,7 +26,9 @@
 	$escapedData = mysqli_real_escape_string($connection, json_encode($data));
 
 	// inserisci nel database
-	$query = "insert into circuits (user, name, circuit) values ('$username', '$name', '$escapedData') on duplicate key update circuit = values(circuit)";
+	$query = "insert into circuits (user, name, circuit) 
+	          values ('$username', '$name', '$escapedData') 
+	          on duplicate key update circuit = values(circuit)";
 
 	if (mysqli_query($connection, $query)) {
 		echo "Circuit stored succesfully";

@@ -13,6 +13,19 @@ import {
 	XNORGate
 } from "./component.js"
 
+// mappa da tipo componente alla classe corrispondente
+const componentClasses = {
+	"IN": Input,
+	"OUT": Output,
+	"NOT": NOTGate,
+	"AND": ANDGate,
+	"NAND": NANDGate,
+	"OR": ORGate,
+	"NOR": NORGate,
+	"XOR": XORGate,
+	"XNOR": XNORGate
+};
+
 // serializza un circuito
 export function serializeCircuit(circuit) {
 	let obj = { circuitName: circuit.circuitName, componentInstances: [] };
@@ -64,7 +77,7 @@ function getInstanceIndex(instance, instances) {
 	if (index !== -1) {
 		return index;
 	} else {
-		console.error("Cannot find component instance " + instance);
+		console.error("Cannot find component instance ", instance);
 	}
 }
 
@@ -88,41 +101,17 @@ export function rebuildCircuit(obj) {
 
 // ricostruisce un istanza dall'oggetto serializzato
 function rebuildInstance(obj) {
-	let instance;
-
-	switch(obj.type) {
-		case "IN":
-			instance = new Input(obj.position);
-			break;
-		case "OUT":
-			instance = new Output(obj.position);
-			break;
-		case "NOT":
-			instance = new NOTGate(obj.position);
-			break;
-		case "AND":
-			instance = new ANDGate(obj.position);
-			break;
-		case "NAND":
-			instance = new NANDGate(obj.position);
-			break;
-		case "OR":
-			instance = new ORGate(obj.position);
-			break;
-		case "NOR":
-			instance = new NORGate(obj.position);
-			break;
-		case "XOR":
-			instance = new XORGate(obj.position);
-			break;
-		case "XNOR":
-			instance = new XNORGate(obj.position);
-			break;
-		default:
-			console.error("Unkown component type " + obj.type);
+	// ottieni un riferimento alla classe del componente
+	let componentClass = componentClasses[obj.type];
+	
+	if(!componentClass) {
+		// il componente non è valido
+		console.error("Unkown component type ", obj.type);
+		return null;
 	}
 
-	return instance;
+	// istanzia il componente e restituiscilo 
+	return new componentClass(obj.position);
 }
 
 // rimette al loro posto le connessioni delle istanze ricostruite
