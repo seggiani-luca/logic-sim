@@ -285,9 +285,33 @@ canvas {
 
 main {
 	grid-area: main;
+	width: 100%;
+	overflow: scroll;
+}
+
+.about-section {
 	margin: 0 auto;
 	max-width: 800px;
 	font-size: 18px;
+}
+
+.pin-img {
+	display: inline;
+	height: 14px;
+	width: 14px;
+}
+
+dt {
+	display: inline;
+}
+
+main img {
+	width: 100%;
+}
+
+figcaption {
+	font-size: 14px;
+	color: var(--darkgray);
 }
 
 .green {

@@ -18,61 +18,77 @@
 			</div>
 		</header>
 		<main>
-			<p>
-				logic-sim è un semplice editor e simulatore per circuiti logici combinatori e asincroni.
-			</p>
-			<p>
-				Dal menu di sinistra si possono selezionare componenti (porte di input/output e porte 
-				logiche), e inserirli nello spazio di lavoro di destra.
-				Sono disponibili i seguenti tipi di componenti:
-				<ul>
-					<li>Porte di ingresso</li>
-					<li>Porte di uscita</li>
-					<li>Porte NOT</li>
-					<li>Porte AND</li>
-					<li>Porte NAND</li>
-					<li>Porte OR</li>
-					<li>Porte NOR</li>
-					<li>Porte XOR</li>
-					<li>Porte XNOR</li>
-				</ul>
-				Cliccando di nuovo su un componente creato viene visualizzato un pulsante per la rimozione
-				dello stesso.
-			</p>
-			<p>
-				Cliccando (non trascinando!) sul pin di uscita di un componente si può creare una 
-				connessione col pin di ingressso di un altro componente, mentre cliccando di nuovo sul pin
-				di ingresso si può eliminare una connessione già esistente.
-				Eliminare un componente significa eliminare tutte le sue connessioni.
-			</p>
+			<div class="about-section">
+				<figure>
+					<img src="assets/img/about/screenshot.png" alt="un adder a 4 cifre">	
+					<figcaption>Un adder a 4 bit</figcaption>
+				</figure>
+				<p>
+					<em>logic-sim</em> è un semplice editor e simulatore per circuiti logici combinatori e 
+					asincroni.
+				</p>
+				<p>
+					Dal menu di sinistra si possono selezionare componenti (cliccando, non trascinando), e 
+					inserirli nello spazio di lavoro di destra. 
+					Sono disponibili i seguenti tipi di componenti:
+					<ul>
+						<li>Ingresso/uscita</li>
+						<ul>
+							<li>Porte di ingresso</li>
+							<li>Porte di uscita</li>
+						</ul>
+						<li>Porte logiche</li>
+						<ul>
+							<li>Porte NOT</li>
+							<li>Porte AND</li>
+							<li>Porte NAND</li>
+							<li>Porte OR</li>
+							<li>Porte NOR</li>
+							<li>Porte XOR</li>
+							<li>Porte XNOR</li>
+						</ul>
+					</ul>
+					Cliccando di nuovo su un componente creato viene visualizzato un pulsante per la 
+					rimozione dello stesso.
+				</p>
+				<p>
+					Cliccando sul pin di uscita di un componente si può creare una connessione col pin di 
+					ingressso di un altro componente, mentre cliccando di nuovo sul pin di ingresso si può 
+					eliminare una connessione già esistente. 
+					Eliminare un componente significa eliminare tutte le sue connessioni.
+				</p>
 
-			<p>
-				Cliccando sul LED di una porta di ingresso si può aggiornare il suo valore logico. Le 
-				variazioni delle variabili logiche si propagano automaticamente attraverso il circuito fino
-				alle porte di uscita, e vengono visualizzate lungo le connessioni fra componenti, sulla 
-				base dei colori:
-				<dl>
-					<dt class="red">Rosso</dt>
-					<dd>Segnale <i>basso</i></dd>
-					<dt class="green">Verde</dt>
-					<dd>Segnale <i>alto</i></dd>
-					<dt class="gray">Grigio</dt>
-					<dd>Segnale in <i>alta impedenza</i></dt>
-				</dl>
-			</p>
+				<p>
+					Cliccando sul LED di una porta di ingresso si può aggiornare il suo valore logico. 
+					Le variazioni delle variabili logiche si propagano automaticamente attraverso il circuito 
+					fino alle porte di uscita, e vengono visualizzate lungo le connessioni fra componenti, 
+					sulla base dei colori:
+					<dl>
+						<img src="assets/img/about/redpin.png" alt="pin rosso" class="pin-img">
+						<dt class="red">Rosso</dt>
+						<dd>Segnale <i>basso</i></dd>
+						<img src="assets/img/about/greenpin.png" alt="pin verde" class="pin-img">
+						<dt class="green">Verde</dt>
+						<dd>Segnale <i>alto</i></dd>
+						<img src="assets/img/about/graypin.png" alt="pin grigio" class="pin-img">
+						<dt class="gray">Grigio</dt>
+						<dd>Segnale in <i>alta impedenza</i></dt>
+					</dl>
+				</p>
 
-			<p>
-				Si può creare un account per salvare i circuiti creati (attraverso l'apposito pulsante 
-				<b>Save</b>), che saranno poi aperti a tutti all'indirizzo:
-				<pre>logic-sim/?user=&lt;nome-creatore&gt;&amp;name=&lt;nome-circuito&gt;</pre>
-				Quando si visita il circuito di un altro utente, il pulsante <b>Save</b> del circuito
-				ne crea una copia sul proprio account.
-			</p>
+				<p>
+					Si può creare un account per salvare i circuiti creati (attraverso l'apposito pulsante 
+					<b>Save</b>), che saranno poi aperti a tutti all'indirizzo:
+					<pre>logic-sim/?user=&lt;nome-creatore&gt;&amp;name=&lt;nome-circuito&gt;</pre>
+					Quando si visita il circuito di un altro utente, il pulsante <b>Save</b> ne crea una 
+					copia sul proprio account.
+				</p>
 
-			<p>
-				L'account dell'utente <i>Luca</i>, con password <i>xorxor</i>, contiene alcuni circuiti di 
-				esempio.
-			</p>
+				<p>
+					L'account dell'utente <i>Luca</i>, con password <i>xorxor</i>, contiene alcuni circuiti 
+					di esempio.
+				</p>
+			</div>
 		</main>
 	</body>
 </html>
