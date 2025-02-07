@@ -13,7 +13,8 @@ import {
 	inoutComponents,
 	gateComponents,
 	// funzione per l'aggiornamento della logica
-	updateLogic
+	updateLogic,
+    miscComponents
 } from "./component.js"
 
 // importa da session.js
@@ -860,7 +861,16 @@ function createComponent(instance) {
 		}
 	}
 
-	// tutto ok, crea
+	// tutto ok
+	// se è del testo, chiedi una stringa all'utente
+	if(instance.type == "Text") {
+		let input = prompt("Enter your text:");
+		if(input != null && input.trim() != "") {
+			instance.text = input;
+		}
+	}
+	
+	// inserisci il componente
 	currentCircuit.componentInstances.push(instance);
 
 	// ordina i componenti
@@ -924,16 +934,20 @@ function newComponentHandler(event, component) {
 
 // inizializza la lista di componenti
 function initComponentList(componentList) {
+	function unrollComponents(components) {
+		for(let component of components) {
+			let componentElement = createComponentElement(component);
+			componentList.appendChild(componentElement);
+		}
+	}
+
 	// ingresso/uscita
 	let inoutsCategory = document.createElement("p");
 	inoutsCategory.classList.add("spacer");
 	inoutsCategory.textContent = "Input/Output";
 	componentList.appendChild(inoutsCategory);
 
-	for(let component of inoutComponents) {
-		let componentElement = createComponentElement(component);
-		componentList.appendChild(componentElement);
-	}
+	unrollComponents(inoutComponents);
 
 	// gate
 	let gatesCategory = document.createElement("p");
@@ -941,10 +955,15 @@ function initComponentList(componentList) {
 	gatesCategory.textContent = "Gates";
 	componentList.appendChild(gatesCategory);
 
-	for(let component of gateComponents) {
-		let componentElement = createComponentElement(component);
-		componentList.appendChild(componentElement);
-	}
+	unrollComponents(gateComponents);
+
+	// misc
+	let miscCategory = document.createElement("p");
+	miscCategory.classList.add("spacer");
+	miscCategory.textContent = "Misc.";
+	componentList.appendChild(miscCategory);
+
+	unrollComponents(miscComponents);
 }
 
 // chiama la init quando il DOM è pronto

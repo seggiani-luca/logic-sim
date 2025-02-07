@@ -26,7 +26,7 @@ import {
 } from "./interface.js";
 
 // costanti di simulazione
-const simMaxIters = 10;
+const simMaxIters = 50;
 
 // classe base per vettori 2d
 export class Vector {
@@ -251,8 +251,10 @@ class Component {
 		this.position = position;
 
 		// simbolo
-		this.symbol = new Image();
-		this.symbol.src = symbolSrc;
+		if(symbolSrc != "") {
+			this.symbol = new Image();
+			this.symbol.src = symbolSrc;
+		}
 
 		// inizializza le array di pin
 		this.inputs = new Array(inputNum).fill(null);
@@ -646,6 +648,31 @@ export class XNORGate extends Component {
 	}
 }
 
+export class TextComponent extends Component {
+	constructor(position) {
+		super("Text",
+		      0, 0,     // pin
+		      2, 1,     // dimensioni
+		      position, // posizione
+		      "");
+
+		this.text = "text";
+	}
+
+	draw(ctx) {
+		let drawX = this.position.x - gridSize * this.width / 2;
+		let drawY = this.position.y;	
+		
+		ctx.fillStyle = "black";
+		ctx.font = "20px monospace";
+		ctx.fillText(this.text, drawX, drawY);
+	}
+
+	evaluate() {
+		return false;
+	}
+}
+
 // tutti i componenti definiti sopra sono accessibili da qui all'interfaccia
 export const inoutComponents = [
 	{ name: "Input", icon: "./assets/img/icons/in_icon.svg", type: Input },
@@ -662,19 +689,23 @@ export const gateComponents = [
 	{ name: "XNOR", icon: "./assets/img/symbols/xnor.svg", type: XNORGate }
 ];
 
+export const miscComponents = [
+	{ name: "Text", icon: "./assets/img/icons/text_icon.svg", type: TextComponent }
+];
+
 // aggiorna la logica dei componenti
 export function updateLogic(components) {
-	// mantieni un insieme dei componenti da aggiornare
-	let queue = new Set(components);
+	// mantieni un insieme dei componenti da aggiornare, iniziando con gli input
+	let set = new Set(components.filter(c => c.type === "IN"));
 
 	for (let i = 0; i < simMaxIters; i++) {
 		console.debug("Processing logic at iteration " + i);
 
 		// l'insieme alla prossima iterazione
-		let nextQueue = new Set();
+		let nextSet = new Set();
 		let stable = true;
 
-		for (let instance of queue) {
+		for (let instance of set) {
 			if (instance.evaluate()) {
 				console.debug("Component " + instance.type + " was unstable, doing another iteration");
 				stable = false;
@@ -682,14 +713,14 @@ export function updateLogic(components) {
 				// aggiungi i suoi successori
 				for(let pin of instance.outputs) {
 					for(let connectedPin of pin.connectedPins) {
-						nextQueue.add(connectedPin.component);
+						nextSet.add(connectedPin.component);
 					}
 				}
 			}
 		}
 
 		if (stable) break;
-		queue = nextQueue;
+		set = nextSet;
 	}
 
 	console.debug("Logic processing stopped");

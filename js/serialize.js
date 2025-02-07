@@ -10,7 +10,8 @@ import {
 	ORGate,
 	NORGate,
 	XORGate,
-	XNORGate
+	XNORGate,
+	TextComponent
 } from "./component.js"
 
 // mappa da tipo componente alla classe corrispondente
@@ -23,7 +24,8 @@ const componentClasses = {
 	"OR": ORGate,
 	"NOR": NORGate,
 	"XOR": XORGate,
-	"XNOR": XNORGate
+	"XNOR": XNORGate,
+	"Text": TextComponent
 };
 
 // serializza un circuito
@@ -47,6 +49,11 @@ function serializeInstance(instance, instances) {
 	// copia proprietà di base
 	obj.type = instance.type;
 	obj.position = instance.position;
+
+	// se è testo, ricordalo
+	if(instance.type == "Text") {
+		obj.text = instance.text;
+	}
 
 	obj.outputs = [];
 
@@ -110,8 +117,15 @@ function rebuildInstance(obj) {
 		return null;
 	}
 
-	// istanzia il componente e restituiscilo 
-	return new componentClass(obj.position);
+	// istanzia il componente 
+	let instance = new componentClass(obj.position);
+
+	if(obj.type = "Text") {
+		instance.text = obj.text;
+	}
+
+	// restituisci il componente 
+	return instance;
 }
 
 // rimette al loro posto le connessioni delle istanze ricostruite
