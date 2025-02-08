@@ -20,9 +20,7 @@ import {
 	onColor,
 	offColor,
 	hizColor,
-	// funzione per l'aggiornamento dell'interfaccia (è il modo più veloce per
-	// aggiornare l'interfaccia in fase di aggiornamento della logica)
-	updateCanvas
+  updateCanvas
 } from "./interface.js";
 
 // costanti di simulazione
@@ -222,14 +220,13 @@ class OutputPin extends Pin {
 	// imposta il valore del pin e restituisce true se è cambiato qualcosa
 	set(value) {
 		console.debug("Pin at index " + this.index + " of component " + this.component.type +
-		              " is being set to value " + value);
+		              " is being set to value " + value + " from value " + this.value);
 
 		// rileva cambiamenti
 		let changed = value != this.value;
 		// aggiorna il valore
 		this.value = value;
 
-		updateCanvas(); // dobbiamo aggiornare qui
 		return changed;
 	}
 }
@@ -695,32 +692,93 @@ export const miscComponents = [
 
 // aggiorna la logica dei componenti
 export function updateLogic(components) {
-	// mantieni un insieme dei componenti da aggiornare, iniziando con gli input
-	let set = new Set(components.filter(c => c.type === "IN"));
+	// mantieni un insieme dei componenti da aggiornare, iniziando chi è disconnesso a sinistra
+	let queue = [];
+	
+	for(let instance of components) {
+		let keep = true;
 
+		for(let input of instance.inputs) {
+			if(input.connectedPin != null) {
+				keep = false;
+				break;
+			}
+		}
+
+		if(!keep) break;
+
+		queue.push(instance);
+	}
+
+	// mantieni un insieme degli elementi visitati
+	let visited = new Set();
+
+	// flag di stabilità della simulazione
+	let stable = true;
+
+	// svolgi iterazioni di simulazione
 	for (let i = 0; i < simMaxIters; i++) {
+		// updateCanvas();
+		// debugger;
+
 		console.debug("Processing logic at iteration " + i);
+		console.debug("Component queue is:");
+		console.debug(queue);
+		console.debug("Visited set is:");
+		console.debug(visited);
 
 		// l'insieme alla prossima iterazione
+		let nextQueue = [];
 		let nextSet = new Set();
-		let stable = true;
 
-		for (let instance of set) {
-			if (instance.evaluate()) {
+		// assumi il circuito come stabile
+		stable = true;
+
+		while(queue.length > 0) {
+			// ottieni la prossima istanza
+			let instance = queue.shift();
+
+			// valuta il componente, ritorno positivo significa che ha cambiato valore
+			let component_unstable = instance.evaluate();
+
+			if (component_unstable) {
 				console.debug("Component " + instance.type + " was unstable, doing another iteration");
+				
+				// tutta l'iterazione non è stata stabile, bisogna farne un altra 
 				stable = false;
+			}
 
-				// aggiungi i suoi successori
-				for(let pin of instance.outputs) {
-					for(let connectedPin of pin.connectedPins) {
-						nextSet.add(connectedPin.component);
+			// aggiungi i suoi successori
+			for(let pin of instance.outputs) {
+				for(let connectedPin of pin.connectedPins) {
+					let component = connectedPin.component;
+
+					// aggiungi se è instabile o se non hai visitato il successore
+					if(component_unstable || !visited.has(component)) {
+						// se lo hai già considerato alla prossima iterazione, ignora
+						if(nextSet.has(component)) continue;
+						
+						// aggiungi il componente alla prossima coda e all'insieme corrispondente
+						nextQueue.push(component);
+						nextSet.add(component);
+
+						// aggiungi il componente alla lista dei nodi visitati
+						visited.add(component);
 					}
 				}
 			}
 		}
 
-		if (stable) break;
-		set = nextSet;
+		console.debug("Next component queue will be:");
+		console.debug(nextQueue);
+
+		// esci se non hai altri componenti da visitare e quelli visitati sono stabili
+		if (nextQueue.length == 0 && stable) break;
+		queue = nextQueue;
+	}
+
+	if(!stable) {
+		alert("Simulator detected oscillation, results may not be accurate");
 	}
 
 	console.debug("Logic processing stopped");

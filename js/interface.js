@@ -14,7 +14,7 @@ import {
 	gateComponents,
 	// funzione per l'aggiornamento della logica
 	updateLogic,
-    miscComponents
+  miscComponents
 } from "./component.js"
 
 // importa da session.js
@@ -58,6 +58,10 @@ export const ledRadius = 10;
 export const onColor = "#3fff00";
 export const offColor = "#ff2400";
 export const hizColor = "#555555";
+
+// scostamento verticale fili
+let verticalWireSeparation = 100;
+let verticalWireSensitivity = 50;
 
 // elementi html
 // pulsante di rimozione componenti
@@ -478,8 +482,8 @@ async function handleCircuitLoad() {
 			console.debug("Circuit fetched");
 
 			// aggiorna dopo il caricamento
+			updateLogic(currentCircuit.componentInstances);
 			updateCanvas();
-			updateLogic(currentCircuit.componentInstances)
 		}
 	}
 }
@@ -759,10 +763,19 @@ function drawWire(startPos, endPos, color) {
 
 	// l'idea è di usare una bezier con due punti di controllo: uno a destra del pin di uscita e uno
 	// a sinistra del pin di ingresso
-	let offset = Math.abs((endPos.x - startPos.x) / 2);
+	let xDelta = endPos.x - startPos.x;
+	let yDelta = endPos.y - startPos.y;
 
-	let cp1 = new Vector(startPos.x + offset, startPos.y);
-	let cp2 = new Vector(endPos.x - offset, endPos.y);
+	let horizOffset = Math.abs((xDelta) / 2);
+	let vertOffset = 0;
+
+	if(xDelta < 0) {
+		let sens = (verticalWireSensitivity - Math.abs(yDelta)) / verticalWireSensitivity;
+		vertOffset = Math.min(Math.max(sens, 0), 1) * verticalWireSeparation * Math.sign(yDelta);
+	}
+
+	let cp1 = new Vector(startPos.x + horizOffset, startPos.y + vertOffset);
+	let cp2 = new Vector(endPos.x - horizOffset, endPos.y + vertOffset);
 
 	ctx.moveTo(startPos.x, startPos.y);
 	ctx.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, endPos.x, endPos.y);
