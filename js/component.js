@@ -705,8 +705,7 @@ export function updateLogic(components) {
 			}
 		}
 
-		if(!keep) break;
-
+		if(!keep) continue;
 		queue.push(instance);
 	}
 
@@ -728,6 +727,9 @@ export function updateLogic(components) {
 		console.debug(visited);
 
 		// l'insieme alla prossima iterazione
+		// si usa una coda per l'accesso in ordine, e un insieme per il controllo dell'inclusione di un
+		// componente. non possiamo usare visited come insieme in quanto lo ignoriamo se il componente
+		// ha dimostrato comportamento instabile (vedere sotto)
 		let nextQueue = [];
 		let nextSet = new Set();
 
@@ -739,9 +741,9 @@ export function updateLogic(components) {
 			let instance = queue.shift();
 
 			// valuta il componente, ritorno positivo significa che ha cambiato valore
-			let component_unstable = instance.evaluate();
+			let componentUnstable = instance.evaluate();
 
-			if (component_unstable) {
+			if (componentUnstable) {
 				console.debug("Component " + instance.type + " was unstable, doing another iteration");
 				
 				// tutta l'iterazione non è stata stabile, bisogna farne un altra 
@@ -754,8 +756,8 @@ export function updateLogic(components) {
 					let component = connectedPin.component;
 
 					// aggiungi se è instabile o se non hai visitato il successore
-					if(component_unstable || !visited.has(component)) {
-						// se lo hai già considerato alla prossima iterazione, ignora
+					if(componentUnstable || !visited.has(component)) {
+						// se lo hai già considerato per prossima iterazione, ignora
 						if(nextSet.has(component)) continue;
 						
 						// aggiungi il componente alla prossima coda e all'insieme corrispondente

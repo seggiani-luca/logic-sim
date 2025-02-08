@@ -95,7 +95,7 @@ export function rebuildCircuit(obj) {
 	// ricostruisci tutti i componenti
 	let instances = obj.componentInstances;
 	for(let instance of instances) {
-		circuit.componentInstances.push(rebuildInstance(instance, instances));
+		circuit.componentInstances.push(rebuildInstance(instance));
 	}
 
 	// ristabilisci le connessioni fra componenti

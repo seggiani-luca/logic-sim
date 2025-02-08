@@ -59,9 +59,12 @@ export const onColor = "#3fff00";
 export const offColor = "#ff2400";
 export const hizColor = "#555555";
 
-// scostamento verticale fili
-let verticalWireSeparation = 100;
-let verticalWireSensitivity = 50;
+// forma fili
+let verticalWireSeparation = 75;
+let verticalWireSensitivity = 200;
+
+let maxWireHorizOffset = 250;
+var invertTreshold = 50;
 
 // elementi html
 // pulsante di rimozione componenti
@@ -763,19 +766,33 @@ function drawWire(startPos, endPos, color) {
 
 	// l'idea è di usare una bezier con due punti di controllo: uno a destra del pin di uscita e uno
 	// a sinistra del pin di ingresso
+
+	// calcola i delta dei capi del filo
 	let xDelta = endPos.x - startPos.x;
 	let yDelta = endPos.y - startPos.y;
 
-	let horizOffset = Math.abs((xDelta) / 2);
+	// calcola uno scostamento orizzontale dato dal delta orizzontale
+	let horizOffset = Math.min(Math.abs((xDelta) / 2), maxWireHorizOffset);
+	
+	// calcola uno scostamento verticale, dato dal delta verticale solo quando il delta orizzontale
+	// è negativo
 	let vertOffset = 0;
 
 	if(xDelta < 0) {
 		let sens = (verticalWireSensitivity - Math.abs(yDelta)) / verticalWireSensitivity;
-		vertOffset = Math.min(Math.max(sens, 0), 1) * verticalWireSeparation * Math.sign(yDelta);
+		
+		let sign = Math.sign(yDelta);
+		// se i pin sono alla stessa y scegli una direzione
+		if(sign == 0) sign = 1;
+		
+		vertOffset = Math.min(Math.max(sens, 0), 1) * verticalWireSeparation * sign;
 	}
 
+	let invertSecond = 1;
+	if(Math.abs(yDelta) > invertTreshold) invertSecond = -1;
+
 	let cp1 = new Vector(startPos.x + horizOffset, startPos.y + vertOffset);
-	let cp2 = new Vector(endPos.x - horizOffset, endPos.y + vertOffset);
+	let cp2 = new Vector(endPos.x - horizOffset, endPos.y + vertOffset * invertSecond);
 
 	ctx.moveTo(startPos.x, startPos.y);
 	ctx.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, endPos.x, endPos.y);
@@ -885,17 +902,6 @@ function createComponent(instance) {
 	
 	// inserisci il componente
 	currentCircuit.componentInstances.push(instance);
-
-	// ordina i componenti
-	currentCircuit.componentInstances.sort((a, b) => {
-		function getTypePriority(component) {
-			if (component instanceof Input) return 0;   // gli input vanno per primi
-			if (component instanceof Output) return 2;  // gli output per ultimi
-			return 1;                                   // tutto il resto a metà
-		}
-
-		return getTypePriority(a) - getTypePriority(b);
-	});
 }
 
 // elimina un'istanza di componente
