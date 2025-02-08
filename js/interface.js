@@ -4,9 +4,6 @@
 
 // importa da component.js
 import {
-	// classi dei componenti
-	Input,
-	Output,
 	// classe vettori 2d
 	Vector,
 	// liste di componenti di input/output e gate

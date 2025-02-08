@@ -20,7 +20,7 @@ import {
 	onColor,
 	offColor,
 	hizColor,
-  updateCanvas
+  // updateCanvas
 } from "./interface.js";
 
 // costanti di simulazione
