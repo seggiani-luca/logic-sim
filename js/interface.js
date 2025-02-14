@@ -57,11 +57,11 @@ export const offColor = "#ff2400";
 export const hizColor = "#555555";
 
 // forma fili
-let verticalWireSeparation = 75;
-let verticalWireSensitivity = 200;
+const verticalWireSeparation = 75;
+const verticalWireSensitivity = 200;
 
-let maxWireHorizOffset = 250;
-var invertTreshold = 50;
+const maxWireHorizOffset = 250;
+const invertTreshold = 50;
 
 // elementi html
 // pulsante di rimozione componenti
