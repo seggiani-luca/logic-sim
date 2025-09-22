@@ -1,0 +1,450 @@
+{
+	"circuitName": "4 way multiplexer",
+	"componentInstances": [
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 135
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 10,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 7,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 6,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 315
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 11,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 8,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 6,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 510,
+				"y": 495
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 12,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 510,
+				"y": 555
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 13,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 510,
+				"y": 615
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 14,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 510,
+				"y": 675
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 15,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 510,
+				"y": 150
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 12,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 510,
+				"y": 240
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 13,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 510,
+				"y": 330
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 14,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 510,
+				"y": 420
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 15,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOT",
+			"position": {
+				"x": 225,
+				"y": 195
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 9,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 8,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOT",
+			"position": {
+				"x": 225,
+				"y": 375
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 9,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 7,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 750,
+				"y": 180
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 16,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 750,
+				"y": 270
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 16,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 750,
+				"y": 360
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 17,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 750,
+				"y": 450
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 18,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "OR",
+			"position": {
+				"x": 900,
+				"y": 210
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 17,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "OR",
+			"position": {
+				"x": 1050,
+				"y": 240
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 18,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "OR",
+			"position": {
+				"x": 1200,
+				"y": 270
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 29,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 135
+			},
+			"text": "b1",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 315
+			},
+			"text": "b0",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 450,
+				"y": 495
+			},
+			"text": "x3",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 450,
+				"y": 555
+			},
+			"text": "x2",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 450,
+				"y": 615
+			},
+			"text": "x1",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 450,
+				"y": 675
+			},
+			"text": "x0",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 1440,
+				"y": 255
+			},
+			"text": "z",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 765
+			},
+			"text": "un multiplexer a 4 vie",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 795
+			},
+			"text": "ingressi: b, un naturale su 2 bit, e x, una variabile a 4 bit",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 825
+			},
+			"text": "uscite: z, una variabile binaria che rappresenta il valore di x all'indice b",
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 1350,
+				"y": 255
+			},
+			"outputs": []
+		}
+	]
+}

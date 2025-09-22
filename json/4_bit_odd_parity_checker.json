@@ -1,0 +1,204 @@
+{
+	"circuitName": "4 bit odd parity checker",
+	"componentInstances": [
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 135
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 4,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 225
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 4,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 315
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 5,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 405
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 6,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "XOR",
+			"position": {
+				"x": 330,
+				"y": 150
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 5,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "XOR",
+			"position": {
+				"x": 450,
+				"y": 180
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 6,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "XOR",
+			"position": {
+				"x": 570,
+				"y": 210
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 15,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 810,
+				"y": 195
+			},
+			"text": "odd",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 135
+			},
+			"text": "x3",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 225
+			},
+			"text": "x2",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 315
+			},
+			"text": "x1",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 405
+			},
+			"text": "x0",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 495
+			},
+			"text": "un controllore di parit\u00e0 dispari a 4 bit",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 525
+			},
+			"text": "ingressi: x, una variabile binaria a 4 bit",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 555
+			},
+			"text": "uscite: odd, un flag di disparit\u00e0 delle componenti alte di x",
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 720,
+				"y": 195
+			},
+			"outputs": []
+		}
+	]
+}

@@ -1,0 +1,245 @@
+{
+	"circuitName": "Full adder",
+	"componentInstances": [
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 135
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 3,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 6,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 225
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 3,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 6,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 315
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 4,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 5,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "XOR",
+			"position": {
+				"x": 390,
+				"y": 150
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 4,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 5,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "XOR",
+			"position": {
+				"x": 600,
+				"y": 210
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 17,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 600,
+				"y": 360
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 7,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 600,
+				"y": 450
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 7,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "OR",
+			"position": {
+				"x": 750,
+				"y": 390
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 16,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 135
+			},
+			"text": "x",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 225
+			},
+			"text": "y",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 315
+			},
+			"text": "cin",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 990,
+				"y": 285
+			},
+			"text": "z",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 990,
+				"y": 375
+			},
+			"text": "cout",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 555
+			},
+			"text": "un full adder",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 585
+			},
+			"text": "ingressi: x e y, due variabili su un bit, e il riporto entrante cin",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 615
+			},
+			"text": "uscite: z, la somma su un bit di x e y, e il riporto uscente cout",
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 900,
+				"y": 375
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 900,
+				"y": 285
+			},
+			"outputs": []
+		}
+	]
+}

@@ -1,0 +1,322 @@
+{
+	"circuitName": "preset clear SR latch",
+	"componentInstances": [
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 135
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 6,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 8,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 285
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 6,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 435
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 9,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 585
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 9,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 11,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 285
+			},
+			"text": "s",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 435
+			},
+			"text": "r",
+			"outputs": []
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 330,
+				"y": 270
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 7,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "OR",
+			"position": {
+				"x": 480,
+				"y": 240
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 12,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOT",
+			"position": {
+				"x": 375,
+				"y": 195
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 7,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 330,
+				"y": 450
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 10,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "OR",
+			"position": {
+				"x": 480,
+				"y": 480
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 13,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOT",
+			"position": {
+				"x": 375,
+				"y": 525
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 10,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOR",
+			"position": {
+				"x": 660,
+				"y": 270
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 13,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 22,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOR",
+			"position": {
+				"x": 660,
+				"y": 450
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 12,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 21,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 930,
+				"y": 255
+			},
+			"text": "q",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 930,
+				"y": 465
+			},
+			"text": "q_",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 675
+			},
+			"text": "un latch SR con intressi di preset e clear",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 705
+			},
+			"text": "ingressi: s e r, i bit di set e reset, e pres e prer, i bit di preset e clear",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 135
+			},
+			"text": "pres",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 585
+			},
+			"text": "prer",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 735
+			},
+			"text": "uscite: q, e q_, cio\u00e8 la variabile di uscita e la sua negazione",
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 840,
+				"y": 255
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 840,
+				"y": 465
+			},
+			"outputs": []
+		}
+	]
+}

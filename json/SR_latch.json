@@ -1,0 +1,160 @@
+{
+	"circuitName": "SR latch",
+	"componentInstances": [
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 135
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 2,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 285
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 3,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOR",
+			"position": {
+				"x": 330,
+				"y": 150
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 3,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 12,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOR",
+			"position": {
+				"x": 330,
+				"y": 270
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 2,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 11,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 135
+			},
+			"text": "s",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 285
+			},
+			"text": "r",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 600,
+				"y": 135
+			},
+			"text": "q",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 600,
+				"y": 285
+			},
+			"text": "q_",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 375
+			},
+			"text": "un latch SR",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 405
+			},
+			"text": "ingressi: s e r, i bit di set e reset",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 435
+			},
+			"text": "uscite: q e q_, cio\u00e8 la variabile di uscita e la sua negazione",
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 510,
+				"y": 135
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 510,
+				"y": 285
+			},
+			"outputs": []
+		}
+	]
+}

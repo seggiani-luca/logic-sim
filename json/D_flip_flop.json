@@ -1,0 +1,362 @@
+{
+	"circuitName": "D flip flop",
+	"componentInstances": [
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 135
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 2,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 4,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 405
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 3,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 4,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 11,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOT",
+			"position": {
+				"x": 225,
+				"y": 165
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 11,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOT",
+			"position": {
+				"x": 225,
+				"y": 435
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 10,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 8,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 450,
+				"y": 150
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 5,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 570,
+				"y": 180
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 7,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 570,
+				"y": 450
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 9,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOR",
+			"position": {
+				"x": 750,
+				"y": 180
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 8,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 6,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOR",
+			"position": {
+				"x": 750,
+				"y": 270
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 7,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 13,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOR",
+			"position": {
+				"x": 750,
+				"y": 420
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 10,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 5,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOR",
+			"position": {
+				"x": 750,
+				"y": 510
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 9,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 12,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 450,
+				"y": 420
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 6,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOR",
+			"position": {
+				"x": 990,
+				"y": 390
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 13,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 21,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOR",
+			"position": {
+				"x": 990,
+				"y": 300
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 12,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 22,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 135
+			},
+			"text": "d",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 405
+			},
+			"text": "clk",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 1260,
+				"y": 285
+			},
+			"text": "q",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 1260,
+				"y": 405
+			},
+			"text": "q_",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 615
+			},
+			"text": "un D flop flop",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 645
+			},
+			"text": "ingressi: d, il bit dati, e clk, l'ingresso del clock",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 675
+			},
+			"text": "uscite: q e q_, cio\u00e8 la variabile di uscita e la sua negazione",
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 1170,
+				"y": 285
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 1170,
+				"y": 405
+			},
+			"outputs": []
+		}
+	]
+}

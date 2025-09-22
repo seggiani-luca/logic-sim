@@ -1,0 +1,278 @@
+{
+	"circuitName": "2 bit decoder",
+	"componentInstances": [
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 135
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 6,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 2,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 3,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 315
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 7,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 2,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 4,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 510,
+				"y": 150
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 17,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 510,
+				"y": 240
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 18,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 510,
+				"y": 330
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 19,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 510,
+				"y": 420
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 20,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOT",
+			"position": {
+				"x": 225,
+				"y": 195
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 5,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 4,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOT",
+			"position": {
+				"x": 225,
+				"y": 375
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 5,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 3,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 135
+			},
+			"text": "x1",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 315
+			},
+			"text": "x0",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 750,
+				"y": 135
+			},
+			"text": "z3",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 750,
+				"y": 225
+			},
+			"text": "z2",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 750,
+				"y": 315
+			},
+			"text": "z1",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 750,
+				"y": 405
+			},
+			"text": "z0",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 555
+			},
+			"text": "ingressi: x, un naturale su 2 bit",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 585
+			},
+			"text": "uscite: z, la codifica one-hot di x",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 525
+			},
+			"text": "un decoder a 2 bit",
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 660,
+				"y": 135
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 660,
+				"y": 225
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 660,
+				"y": 315
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 660,
+				"y": 405
+			},
+			"outputs": []
+		}
+	]
+}

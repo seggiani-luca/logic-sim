@@ -1,0 +1,653 @@
+{
+	"circuitName": "3 bit decoder",
+	"componentInstances": [
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 135
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 11,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 6,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 5,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 4,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 3,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 315
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 12,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 16,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 17,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 20,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 21,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 495
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 13,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 15,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 19,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 17,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 21,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 750,
+				"y": 150
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 43,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 750,
+				"y": 240
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 42,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 750,
+				"y": 330
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 41,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 750,
+				"y": 420
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 40,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 750,
+				"y": 510
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 39,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 750,
+				"y": 600
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 38,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 750,
+				"y": 690
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 37,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 750,
+				"y": 780
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 36,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOT",
+			"position": {
+				"x": 225,
+				"y": 195
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 10,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 9,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 8,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 7,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOT",
+			"position": {
+				"x": 225,
+				"y": 375
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 14,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 15,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 18,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 19,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOT",
+			"position": {
+				"x": 225,
+				"y": 555
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 14,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 16,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 18,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 20,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 630,
+				"y": 810
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 10,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 630,
+				"y": 720
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 9,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 630,
+				"y": 630
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 8,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 630,
+				"y": 540
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 7,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 630,
+				"y": 450
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 6,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 630,
+				"y": 360
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 5,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 630,
+				"y": 270
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 4,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 630,
+				"y": 180
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 3,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 135
+			},
+			"text": "x2",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 315
+			},
+			"text": "x1",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 495
+			},
+			"text": "x0",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 990,
+				"y": 135
+			},
+			"text": "z7",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 990,
+				"y": 225
+			},
+			"text": "z6",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 990,
+				"y": 315
+			},
+			"text": "z5",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 990,
+				"y": 405
+			},
+			"text": "z4",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 990,
+				"y": 495
+			},
+			"text": "z3",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 990,
+				"y": 585
+			},
+			"text": "z2",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 990,
+				"y": 675
+			},
+			"text": "z1",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 990,
+				"y": 765
+			},
+			"text": "z0",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 915
+			},
+			"text": "un decoder a 3 bit",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 945
+			},
+			"text": "ingressi: x, un naturale su 3 bit",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 975
+			},
+			"text": "uscite: z, la codifica one-hot di x",
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 900,
+				"y": 765
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 900,
+				"y": 675
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 900,
+				"y": 585
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 900,
+				"y": 495
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 900,
+				"y": 405
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 900,
+				"y": 315
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 900,
+				"y": 225
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 900,
+				"y": 135
+			},
+			"outputs": []
+		}
+	]
+}

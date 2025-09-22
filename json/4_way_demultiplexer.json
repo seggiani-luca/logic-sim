@@ -1,0 +1,384 @@
+{
+	"circuitName": "4 way demultiplexer",
+	"componentInstances": [
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 135
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 7,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 4,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 3,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 315
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 8,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 5,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 3,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 510,
+				"y": 495
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 9,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 10,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 11,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 12,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 510,
+				"y": 150
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 9,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 510,
+				"y": 240
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 10,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 510,
+				"y": 330
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 11,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 510,
+				"y": 420
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 12,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOT",
+			"position": {
+				"x": 225,
+				"y": 195
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 6,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 5,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOT",
+			"position": {
+				"x": 225,
+				"y": 375
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 6,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 4,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 750,
+				"y": 180
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 23,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 750,
+				"y": 270
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 24,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 750,
+				"y": 360
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 25,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 750,
+				"y": 450
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 26,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 135
+			},
+			"text": "b1",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 315
+			},
+			"text": "b0",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 450,
+				"y": 495
+			},
+			"text": "x",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 990,
+				"y": 165
+			},
+			"text": "z3",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 990,
+				"y": 255
+			},
+			"text": "z2",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 990,
+				"y": 345
+			},
+			"text": "z1",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 990,
+				"y": 435
+			},
+			"text": "z0",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 585
+			},
+			"text": "un demultiplexer a 4 vie",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 615
+			},
+			"text": "ingressi: b, un naturale su 2 bit, e x, una variabile binaria",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 645
+			},
+			"text": "uscite: z, una variabile a 4 bit, dove il bit di indice b vale x",
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 900,
+				"y": 165
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 900,
+				"y": 255
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 900,
+				"y": 345
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 900,
+				"y": 435
+			},
+			"outputs": []
+		}
+	]
+}

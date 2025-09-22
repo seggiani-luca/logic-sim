@@ -1,0 +1,587 @@
+{
+	"circuitName": "2 bit divider",
+	"componentInstances": [
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 135
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 9,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 12,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 13,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 15,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 225
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 11,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 13,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 19,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 375
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 8,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 16,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 18,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 465
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 10,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 17,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 135
+			},
+			"text": "x1",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 225
+			},
+			"text": "x0",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 375
+			},
+			"text": "y1",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 465
+			},
+			"text": "y0",
+			"outputs": []
+		},
+		{
+			"type": "NOT",
+			"position": {
+				"x": 225,
+				"y": 405
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 12,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 14,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 24,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOT",
+			"position": {
+				"x": 225,
+				"y": 165
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 14,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 18,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 23,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOT",
+			"position": {
+				"x": 225,
+				"y": 495
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 15,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 19,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 24,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOT",
+			"position": {
+				"x": 225,
+				"y": 255
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 16,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 23,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 630,
+				"y": 150
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 34,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 630,
+				"y": 210
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 21,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 630,
+				"y": 270
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 21,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 630,
+				"y": 330
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 22,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 630,
+				"y": 390
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 17,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 750,
+				"y": 420
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 36,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 630,
+				"y": 480
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 20,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 630,
+				"y": 540
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 20,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "OR",
+			"position": {
+				"x": 750,
+				"y": 510
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 37,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "OR",
+			"position": {
+				"x": 750,
+				"y": 210
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 22,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "OR",
+			"position": {
+				"x": 870,
+				"y": 240
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 35,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 630,
+				"y": 630
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 25,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 630,
+				"y": 690
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 25,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "OR",
+			"position": {
+				"x": 750,
+				"y": 660
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 38,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 1110,
+				"y": 135
+			},
+			"text": "q1",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 1110,
+				"y": 225
+			},
+			"text": "q0",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 1110,
+				"y": 375
+			},
+			"text": "r1",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 1110,
+				"y": 465
+			},
+			"text": "r0",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 1110,
+				"y": 615
+			},
+			"text": "ndiv",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 795
+			},
+			"text": "un divisore a 2 bit",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 825
+			},
+			"text": "ingressi: x e y, due naturali su 2 bit",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 855
+			},
+			"text": "uscite: q e r, quoziente e resto della divisione fra x e y, e ndiv, un flag di non fattibilit\u00e0",
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 1020,
+				"y": 135
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 1020,
+				"y": 225
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 1020,
+				"y": 375
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 1020,
+				"y": 465
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 1020,
+				"y": 615
+			},
+			"outputs": []
+		}
+	]
+}

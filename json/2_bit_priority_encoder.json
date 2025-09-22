@@ -1,0 +1,250 @@
+{
+	"circuitName": "2 bit priority encoder",
+	"componentInstances": [
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 135
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 4,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 7,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 225
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 4,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 6,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 315
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 5,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 405
+			},
+			"outputs": [
+				{
+					"connectedPins": []
+				}
+			]
+		},
+		{
+			"type": "OR",
+			"position": {
+				"x": 390,
+				"y": 150
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 18,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 390,
+				"y": 270
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 7,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "NOT",
+			"position": {
+				"x": 225,
+				"y": 255
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 5,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "OR",
+			"position": {
+				"x": 570,
+				"y": 240
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 19,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 270,
+				"y": 405
+			},
+			"text": "(restituisce 0)",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 135
+			},
+			"text": "x3",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 225
+			},
+			"text": "x2",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 315
+			},
+			"text": "x1",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 405
+			},
+			"text": "x0",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 840,
+				"y": 135
+			},
+			"text": "z1",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 840,
+				"y": 225
+			},
+			"text": "z0",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 495
+			},
+			"text": "un encoder di priorit\u00e0 a 2 bit",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 525
+			},
+			"text": "ingressi: x, una variabile binaria a 4 bit",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 555
+			},
+			"text": "uscita: z, la codifica del bit di indice pi\u00f9 alto attivo di x",
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 750,
+				"y": 135
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 750,
+				"y": 225
+			},
+			"outputs": []
+		}
+	]
+}

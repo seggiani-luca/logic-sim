@@ -1,0 +1,372 @@
+{
+	"circuitName": "2 bit multiplier",
+	"componentInstances": [
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 135
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 10,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 11,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 225
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 9,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 8,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 375
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 8,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 11,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "IN",
+			"position": {
+				"x": 150,
+				"y": 465
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 9,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 10,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 135
+			},
+			"text": "x1",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 225
+			},
+			"text": "x0",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 375
+			},
+			"text": "y1",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 465
+			},
+			"text": "y0",
+			"outputs": []
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 390,
+				"y": 150
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 12,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 13,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 390,
+				"y": 240
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 23,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 390,
+				"y": 360
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 12,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 13,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 390,
+				"y": 450
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 14,
+							"pinIdx": 1
+						},
+						{
+							"componentIdx": 15,
+							"pinIdx": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "XOR",
+			"position": {
+				"x": 570,
+				"y": 240
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 24,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 570,
+				"y": 360
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 14,
+							"pinIdx": 0
+						},
+						{
+							"componentIdx": 15,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "AND",
+			"position": {
+				"x": 750,
+				"y": 450
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 26,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "XOR",
+			"position": {
+				"x": 750,
+				"y": 360
+			},
+			"outputs": [
+				{
+					"connectedPins": [
+						{
+							"componentIdx": 25,
+							"pinIdx": 0
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 1020,
+				"y": 195
+			},
+			"text": "z3",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 1020,
+				"y": 285
+			},
+			"text": "z2",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 1020,
+				"y": 375
+			},
+			"text": "z1",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 1020,
+				"y": 465
+			},
+			"text": "z0",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 555
+			},
+			"text": "un moltiplicatore a 2 bit",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 585
+			},
+			"text": "ingressi: x e y, due naturali su 2 bit",
+			"outputs": []
+		},
+		{
+			"type": "Text",
+			"position": {
+				"x": 90,
+				"y": 615
+			},
+			"text": "uscite: z, il prodotto di x e y su 4 bit",
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 930,
+				"y": 465
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 930,
+				"y": 375
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 930,
+				"y": 285
+			},
+			"outputs": []
+		},
+		{
+			"type": "OUT",
+			"position": {
+				"x": 930,
+				"y": 195
+			},
+			"outputs": []
+		}
+	]
+}

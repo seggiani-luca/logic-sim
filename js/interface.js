@@ -15,19 +15,26 @@ import {
 } from "./component.js"
 
 // importa da session.js
+// import {
+// 	// funzioni di gestione degli accessi
+// 	login,
+// 	signup,
+// 	logout,
+// 	statusRequest,
+// 	// l'utente connesso
+// 	loggedInUser,
+// 	// funzioni di gestione dei circuiti
+// 	loadCircuit,
+// 	uploadCircuit,
+// 	fetchCircuits
+// } from "./session.js";
+
+// importa da session.js
 import {
-	// funzioni di gestione degli accessi
-	login,
-	signup,
-	logout,
-	statusRequest,
-	// l'utente connesso
-	loggedInUser,
-	// funzioni di gestione dei circuiti
-	loadCircuit,
-	uploadCircuit,
-	fetchCircuits
-} from "./session.js";
+	saveCircuitLocal,
+	loadCircuitLocal,
+  loadExampleCircuit
+} from "./local.js";
 
 // costanti di dimensionamento e stile
 // dimensioni e colore griglia
@@ -68,40 +75,40 @@ const invertTreshold = 50;
 var deleteButtonElement;
 
 // pulsanti di accesso ai menu a comparsa
-var saveButton;
-var loginButton;
-var logoutButton;
+// var saveButton;
+// var loginButton;
+// var logoutButton;
 
 // menu a comparsa
-var loginMenu;
-var signupMenu;
-var saveMenu;
+// var loginMenu;
+// var signupMenu;
+// var saveMenu;
 var storedMenu;
 
 // lista dei circuiti dell'utente
-var userCircuits;
+var exampleCircuits;
 
 // nome circuito da salvare
-var saveText;
+// var saveText;
 // segnalatore di circuito salvato
-var saveTooltip;
+// var saveTooltip;
 
 // campi di input del menu di login
-var loginUsernameText;
-var loginPasswordText;
+// var loginUsernameText;
+// var loginPasswordText;
 
 // campi di input del menu di signup
-var signupUsernameText;
-var signupPasswordText;
+// var signupUsernameText;
+// var signupPasswordText;
 
 // segnalatore dell'utente connesso
-var loggedUserText;
+// var loggedUserText;
 
 // avviso nessun circuito creato
-var emptyCircuitText;
+// var emptyCircuitText;
 
 // validazione
-const nameRegex = /^[A-Za-z1-9 ]+$/;
+// const nameRegex = /^[A-Za-z1-9 ]+$/;
 
 // canvas
 var canvasContainer;
@@ -317,55 +324,62 @@ function init() {
 	window.hidePopups = hidePopups;
 
 	// chiamate dai pulsanti nell'header
-	window.beginLogin = beginLogin;
-	window.beginSignup = beginSignup;
-	window.saveCircuit = saveCircuit;
+	// window.beginLogin = beginLogin;
+	// window.beginSignup = beginSignup;
+	// window.saveCircuit = saveCircuit;
 	window.seeStored = seeStored;
 	window.newCircuit = newCircuit;
 
+	// chiamate dai pulsianti per le funzioni salva/carica locali
+	window.saveCircuit = saveCircuit;
+	window.loadCircuit = loadCircuit;
+
 	// chiamate dai pulsanti dei menu a comparsa
-	window.saveConfirm = saveConfirm;
-	window.loginConfirm = loginConfirm;
-	window.signupConfirm = signupConfirm;
+	// window.saveConfirm = saveConfirm;
+	// window.loginConfirm = loginConfirm;
+	// window.signupConfirm = signupConfirm;
 
 	// chiamata dal pulsante di logOut
-	window.logoutConfirm = logoutConfirm;
+	// window.logoutConfirm = logoutConfirm;
 
 	// il pulsante di salvataggio può essere disattivato
-	saveButton = document.querySelector(".save-button");
+	// saveButton = document.querySelector(".save-button");
 
 	// i pulsanti di login/logout possono essere disattivati
-	loginButton = document.querySelector(".login-button");
-	logoutButton = document.querySelector(".logout-button");
+	// loginButton = document.querySelector(".login-button");
+	// logoutButton = document.querySelector(".logout-button");
 
 	// menu a comparsa
-	loginMenu = document.querySelector(".login-menu");
-	signupMenu = document.querySelector(".signup-menu");
-	saveMenu = document.querySelector(".save-menu");
+	// loginMenu = document.querySelector(".login-menu");
+	// signupMenu = document.querySelector(".signup-menu");
+	// saveMenu = document.querySelector(".save-menu");
 	storedMenu = document.querySelector(".stored-menu");
 
 	// menu salvataggio
-	saveText = document.querySelector(".save-text");
-	saveTooltip = document.querySelector(".save-tooltip");
+	// saveText = document.querySelector(".save-text");
+	// saveTooltip = document.querySelector(".save-tooltip");
 
 	// menu login
-	loginUsernameText = document.querySelector(".login-username-text");
-	loginPasswordText = document.querySelector(".login-password-text");
+	// loginUsernameText = document.querySelector(".login-username-text");
+	// loginPasswordText = document.querySelector(".login-password-text");
 
 	// menu signup
-	signupUsernameText = document.querySelector(".signup-username-text");
-	signupPasswordText = document.querySelector(".signup-password-text");
+	// signupUsernameText = document.querySelector(".signup-username-text");
+	// signupPasswordText = document.querySelector(".signup-password-text");
 
 	// segnalatore dell'utente connesso
-	loggedUserText = document.querySelector(".logged-user");
+	// loggedUserText = document.querySelector(".logged-user");
 
-	// menu circuiti salvati
-	userCircuits = document.querySelector(".user-circuits");
-	emptyCircuitText = document.querySelector(".empty-circuits");
+	// menu circuiti d'esempio 
+	exampleCircuits = document.querySelector(".example-circuits");
+	// emptyCircuitText = document.querySelector(".empty-circuits");
 
 	// lista dei componenti
 	let componentListElement = document.querySelector(".component-list");
 	initComponentList(componentListElement);
+
+	// ottieni i circuiti di esempio
+	setupExampleCircuits();
 
 	// canvas
 	canvasContainer = document.querySelector(".canvas-container");
@@ -446,15 +460,50 @@ async function setupCircuits() {
 	}
 }
 
+async function setupExampleCircuits() {
+	exampleCircuits.innerHTML = "";
+
+	let exampleCircuitNames = [
+		"json/2_bit_adder.json", "json/2_bit_comparator.json", "json/2_bit_decoder.json", 
+		"json/2_bit_divider.json", "json/2_bit_encoder.json", "json/2_bit_multiplier.json", 
+		"json/2_bit_priority_encoder.json", "json/2_bit_subtractor.json", "json/3_bit_decoder.json", 
+		"json/3_bit_encoder.json", "json/4_bit_adder.json", "json/4_bit_even_parity_checker.json", 
+		"json/4_bit_odd_parity_checker.json", "json/4_bit_shift_register.json", 
+		"json/4_way_demultiplexer.json", "json/4_way_multiplexer.json", "json/7474_D_flip_flop.json", 
+		"json/C_element.json", "json/D_flip_flop.json", "json/D_latch.json",
+		"json/Full_adder.json", "json/JK_flip_flop.json", "json/Master_slave_D_flip_flop.json", 
+		"json/preset_clear_SR_latch.json", "json/SR_latch.json"
+	];
+
+	for(let circuitName of exampleCircuitNames) {
+		let circuit = await loadExampleCircuit(circuitName);
+		addCircuitElement(circuit);
+	}
+}
+
 // crea un nuovo elemento circuito nel menu dei circuiti salvati
 function addCircuitElement(circuit) {
 	let circuitElement = document.createElement("a");
-	circuitElement.textContent = circuit;
+	circuitElement.textContent = circuit.circuitName;
 
 	// il circuito si raggiunge con una stringa di query comprendente di nome utente e circuito
-	circuitElement.setAttribute("href", "?user=" + loggedInUser + "&name=" + circuit);
+	// circuitelement.setattribute("href", "?user=" + loggedinuser + "&name=" + circuit);
 
-	userCircuits.appendChild(circuitElement);
+	circuitElement.setAttribute("href", "#");
+
+	circuitElement.addEventListener("click", () => {
+		currentCircuit = circuit;
+
+		console.debug("Circuit fetched");
+
+		// aggiorna dopo il caricamento
+		updateLogic(currentCircuit.componentInstances);
+		updateCanvas();
+
+		hidePopups();
+	});
+
+	exampleCircuits.appendChild(circuitElement);
 }
 
 // carica la pagina vuota
@@ -567,9 +616,9 @@ function deleteButtonHandler(event) {
 
 // chiude tutti i menu a comparsa
 function hidePopups() {
-	loginMenu.classList.add("hide");
-	signupMenu.classList.add("hide");
-	saveMenu.classList.add("hide");
+	// loginMenu.classList.add("hide");
+	// signupMenu.classList.add("hide");
+	// saveMenu.classList.add("hide");
 	storedMenu.classList.add("hide");
 }
 
@@ -663,26 +712,26 @@ async function signupConfirm() {
 }
 
 // gestisce il pulsante di salvataggio
-async function saveCircuit() {
-	if(currentCircuit.circuitName == null) {
-		// se non c'è un nome, apri il menu
-		hidePopups();
-		saveMenu.classList.remove("hide");
-	} else {
-		// altrimenti carica e basta
-		await uploadCircuit(currentCircuit);
-		
-		// aggiorna i circuiti dell'utente (potrebbe servire comunque se un utente sta copiando il 
-		// circuito di un altro utente)
-		setupCircuits();
-
-		// segnala il salvataggio per 3 secondi
-		saveTooltip.classList.remove("hide");
-		setTimeout(() => {
-			saveTooltip.classList.add("hide");
-		}, 3000);
-	}
-}
+// async function saveCircuit() {
+// 	if(currentCircuit.circuitName == null) {
+// 		// se non c'è un nome, apri il menu
+// 		hidePopups();
+// 		saveMenu.classList.remove("hide");
+// 	} else {
+// 		// altrimenti carica e basta
+// 		await uploadCircuit(currentCircuit);
+// 		
+// 		// aggiorna i circuiti dell'utente (potrebbe servire comunque se un utente sta copiando il 
+// 		// circuito di un altro utente)
+// 		setupCircuits();
+// 
+// 		// segnala il salvataggio per 3 secondi
+// 		saveTooltip.classList.remove("hide");
+// 		setTimeout(() => {
+// 			saveTooltip.classList.add("hide");
+// 		}, 3000);
+// 	}
+// }
 async function saveConfirm() {
 	let name = saveText.value;
 
@@ -728,6 +777,31 @@ async function logoutConfirm() {
 			alert("Couldn't logout");
 		default:
 			console.debug("Logout failed");
+	}
+}
+
+// funzioni salva/carica su locale
+function saveCircuit() {
+	saveCircuitLocal(currentCircuit);
+}
+
+async function loadCircuit() {
+	try {
+		// ottieni il circuito
+		let circuit = await loadCircuitLocal();
+
+		if(circuit) {
+			// c'è qualcosa da caricare
+			currentCircuit = circuit;
+
+			console.debug("Circuit fetched");
+
+			// aggiorna dopo il caricamento
+			updateLogic(currentCircuit.componentInstances);
+			updateCanvas();
+		}
+	}	catch(err) {
+		console.log("Error fetching circuit " + err);
 	}
 }
 
@@ -988,7 +1062,7 @@ document.addEventListener("DOMContentLoaded", init);
 // gestisce la sessione all'apertura della pagina
 window.onload = () => {
 	// prima controlla la sessione
-	checkSession();
+	// checkSession();
 	// poi carica il circuito, se serve
 	handleCircuitLoad();
 }
