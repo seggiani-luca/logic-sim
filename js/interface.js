@@ -430,13 +430,13 @@ function init() {
 }
 
 // controlla la sessione
-async function checkSession() {
-	let username = await statusRequest();
-	if(username) {
-		// c'è un utente connesso
-		setupLoggedSession(username);
-	}
-}
+// async function checkSession() {
+// 	let username = await statusRequest();
+// 	if(username) {
+// 		// c'è un utente connesso
+// 		setupLoggedSession(username);
+// 	}
+// }
 
 // ottiene i circuiti dell utente
 async function setupCircuits() {
@@ -515,27 +515,27 @@ function newCircuit() {
 }
 
 // carica un eventuale circuito all'avvio della pagina
-async function handleCircuitLoad() {
-	let params = new URLSearchParams(window.location.search);
-
-	let user = params.get("user");
-	let name = params.get("name");
-	if(user != null & name != null) {
-		// è stata fornita la stringa di query, ottieni il circuito
-		let circuit = await loadCircuit(user, name);
-
-		if(circuit) {
-			// c'è qualcosa da caricare
-			currentCircuit = circuit;
-
-			console.debug("Circuit fetched");
-
-			// aggiorna dopo il caricamento
-			updateLogic(currentCircuit.componentInstances);
-			updateCanvas();
-		}
-	}
-}
+// async function handleCircuitLoad() {
+// 	let params = new URLSearchParams(window.location.search);
+// 
+// 	let user = params.get("user");
+// 	let name = params.get("name");
+// 	if(user != null & name != null) {
+// 		// è stata fornita la stringa di query, ottieni il circuito
+// 		let circuit = await loadCircuit(user, name);
+// 
+// 		if(circuit) {
+// 			// c'è qualcosa da caricare
+// 			currentCircuit = circuit;
+// 
+// 			console.debug("Circuit fetched");
+// 
+// 			// aggiorna dopo il caricamento
+// 			updateLogic(currentCircuit.componentInstances);
+// 			updateCanvas();
+// 		}
+// 	}
+// }
 
 // utilità per le trasformazioni da schermo a canvas
 function screenToCanvas(x, y) { // questa prende una coppia di numeri e non un vettore, perchè è
@@ -623,93 +623,93 @@ function hidePopups() {
 }
 
 // gestisce il pulsante di login
-function beginLogin() {
-	hidePopups();
-	loginMenu.classList.remove("hide");
-}
-async function loginConfirm() {
-	// ottieni username e password
-	let username = loginUsernameText.value;
-	let password = loginPasswordText.value;
-
-	let result = await login(username, password);
-
-	switch(result) {
-		case "user-invalid":
-			loginUsernameText.setCustomValidity("Invalid username, use digits, letters spaces or " +
-			                                    "underscores");
-			loginUsernameText.reportValidity();
-			break;
-		case "pass-invalid":
-			loginPasswordText.setCustomValidity("Invalid password, use digits, letters, spaces or " +
-			                                    "underscores");
-			loginPasswordText.reportValidity();
-			break;
-		case "success":
-			setupLoggedSession(username);
-			break;
-		case "failure":
-			alert("Couldn't log in");
-		default:
-			console.debug("Login failed");
-	}
-}
+// function beginLogin() {
+// 	hidePopups();
+// 	loginMenu.classList.remove("hide");
+// }
+// async function loginConfirm() {
+// 	// ottieni username e password
+// 	let username = loginUsernameText.value;
+// 	let password = loginPasswordText.value;
+// 
+// 	let result = await login(username, password);
+// 
+// 	switch(result) {
+// 		case "user-invalid":
+// 			loginUsernameText.setCustomValidity("Invalid username, use digits, letters spaces or " +
+// 			                                    "underscores");
+// 			loginUsernameText.reportValidity();
+// 			break;
+// 		case "pass-invalid":
+// 			loginPasswordText.setCustomValidity("Invalid password, use digits, letters, spaces or " +
+// 			                                    "underscores");
+// 			loginPasswordText.reportValidity();
+// 			break;
+// 		case "success":
+// 			setupLoggedSession(username);
+// 			break;
+// 		case "failure":
+// 			alert("Couldn't log in");
+// 		default:
+// 			console.debug("Login failed");
+// 	}
+// }
 
 // imposta la sessione dell'utente
-function setupLoggedSession(username) {
-	// mostra l'utente corrente
-	loggedUserText.textContent = "Logged in as " + username;
-	loggedUserText.classList.remove("hide");
-
-	// ora si può salvare
-	saveButton.removeAttribute("disabled");
-
-	// non vogliamo più fare login ma logout
-	loginButton.classList.add("hide");
-	logoutButton.classList.remove("hide");
-
-	// chiudiamo il menu di login
-	loginMenu.classList.add("hide");
-
-	// ottieni i circuiti dell'utente
-	setupCircuits();
-}
+// function setupLoggedSession(username) {
+// 	// mostra l'utente corrente
+// 	loggedUserText.textContent = "Logged in as " + username;
+// 	loggedUserText.classList.remove("hide");
+// 
+// 	// ora si può salvare
+// 	saveButton.removeAttribute("disabled");
+// 
+// 	// non vogliamo più fare login ma logout
+// 	loginButton.classList.add("hide");
+// 	logoutButton.classList.remove("hide");
+// 
+// 	// chiudiamo il menu di login
+// 	loginMenu.classList.add("hide");
+// 
+// 	// ottieni i circuiti dell'utente
+// 	setupCircuits();
+// }
 
 // gestisce il pulsante di signup
-function beginSignup() {
-	hidePopups();
-	signupMenu.classList.remove("hide");
-}
-async function signupConfirm() {
-	let username = signupUsernameText.value;
-	let password = signupPasswordText.value;
-
-	let result = await signup(username, password);
-
-	switch(result) {
-		case "user-invalid":
-			signupUsernameText.setCustomValidity("Invalid username, use digits, letters, spaces or " +
-			                                     "underscores");
-			signupUsernameText.reportValidity();
-			break;
-		case "pass-invalid":
-			signupPasswordText.setCustomValidity("Invalid password, use digits, letters, spaces or " + 
-			                                     "underscores");
-			signupPasswordText.reportValidity();
-			break;
-		case "success":
-			alert("Signed up succesfully, log in with your new credentials");
-
-			// mostra il menu di login
-			signupMenu.classList.add("hide");
-			loginMenu.classList.remove("hide");
-			break;
-		case "failure":
-			alert("Couldn't sign up");
-		default:
-			console.debug("Signup failed");
-	}
-}
+// function beginSignup() {
+// 	hidePopups();
+// 	signupMenu.classList.remove("hide");
+// }
+// async function signupConfirm() {
+// 	let username = signupUsernameText.value;
+// 	let password = signupPasswordText.value;
+// 
+// 	let result = await signup(username, password);
+// 
+// 	switch(result) {
+// 		case "user-invalid":
+// 			signupUsernameText.setCustomValidity("Invalid username, use digits, letters, spaces or " +
+// 			                                     "underscores");
+// 			signupUsernameText.reportValidity();
+// 			break;
+// 		case "pass-invalid":
+// 			signupPasswordText.setCustomValidity("Invalid password, use digits, letters, spaces or " + 
+// 			                                     "underscores");
+// 			signupPasswordText.reportValidity();
+// 			break;
+// 		case "success":
+// 			alert("Signed up succesfully, log in with your new credentials");
+// 
+// 			// mostra il menu di login
+// 			signupMenu.classList.add("hide");
+// 			loginMenu.classList.remove("hide");
+// 			break;
+// 		case "failure":
+// 			alert("Couldn't sign up");
+// 		default:
+// 			console.debug("Signup failed");
+// 	}
+// }
 
 // gestisce il pulsante di salvataggio
 // async function saveCircuit() {
@@ -732,25 +732,25 @@ async function signupConfirm() {
 // 		}, 3000);
 // 	}
 // }
-async function saveConfirm() {
-	let name = saveText.value;
-
-	// controlla se il nome è vallido
-	if(name != "" && nameRegex.test(name)) {
-		// è valido, assegnalo e salva
-		currentCircuit.circuitName = name;
-		await uploadCircuit(currentCircuit);
-
-		// aggiorna i circuiti dell'utente
-		setupCircuits();
-
-		// chiudi il menu
-		saveMenu.classList.add("hide");
-	} else {
-		saveText.setCustomValidity("Invalid name, use digits, letters or spaces");
-		saveText.reportValidity();
-	}
-}
+// async function saveConfirm() {
+// 	let name = saveText.value;
+// 
+// 	// controlla se il nome è vallido
+// 	if(name != "" && nameRegex.test(name)) {
+// 		// è valido, assegnalo e salva
+// 		currentCircuit.circuitName = name;
+// 		await uploadCircuit(currentCircuit);
+// 
+// 		// aggiorna i circuiti dell'utente
+// 		setupCircuits();
+// 
+// 		// chiudi il menu
+// 		saveMenu.classList.add("hide");
+// 	} else {
+// 		saveText.setCustomValidity("Invalid name, use digits, letters or spaces");
+// 		saveText.reportValidity();
+// 	}
+// }
 
 // gestisce il pulsante del menu circuiti salvati
 function seeStored() {
@@ -758,33 +758,34 @@ function seeStored() {
 }
 
 // gestisce il logout
-async function logoutConfirm() {
-	hidePopups();
-	let result = await logout();
+// async function logoutConfirm() {
+// 	hidePopups();
+// 	let result = await logout();
+// 
+// 	switch(result) {
+// 		case "success":
+// 			// sei disconnesso, ritorna allo stato di default
+// 			saveButton.setAttribute("disabled", "");
+// 			loginButton.classList.remove("hide");
+// 			logoutButton.classList.add("hide");
+// 			loggedUserText.classList.add("hide");
+// 
+// 			// dimenticati i circuiti
+// 			setupCircuits();
+// 			break;
+// 		case "failure":
+// 			alert("Couldn't logout");
+// 		default:
+// 			console.debug("Logout failed");
+// 	}
+// }
 
-	switch(result) {
-		case "success":
-			// sei disconnesso, ritorna allo stato di default
-			saveButton.setAttribute("disabled", "");
-			loginButton.classList.remove("hide");
-			logoutButton.classList.add("hide");
-			loggedUserText.classList.add("hide");
-
-			// dimenticati i circuiti
-			setupCircuits();
-			break;
-		case "failure":
-			alert("Couldn't logout");
-		default:
-			console.debug("Logout failed");
-	}
-}
-
-// funzioni salva/carica su locale
+// salvataggio su locale 
 function saveCircuit() {
 	saveCircuitLocal(currentCircuit);
 }
 
+// caricamento da locale
 async function loadCircuit() {
 	try {
 		// ottieni il circuito
@@ -1060,9 +1061,9 @@ function initComponentList(componentList) {
 document.addEventListener("DOMContentLoaded", init);
 
 // gestisce la sessione all'apertura della pagina
-window.onload = () => {
-	// prima controlla la sessione
-	// checkSession();
-	// poi carica il circuito, se serve
-	handleCircuitLoad();
-}
+// window.onload = () => {
+// 	// prima controlla la sessione
+// 	checkSession();
+// 	// poi carica il circuito, se serve
+// 	handleCircuitLoad();
+// }
